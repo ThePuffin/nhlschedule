@@ -1,10 +1,10 @@
 import React from 'react';
 
+import CardSchedule from './cardSchedule/cardSchedule';
+import DateTimePicker from './dateTimePicker/dateTimePicker';
 import Filter from './filter/filter';
 
-const ITeam = require('../../nhl data/ITeam.ts');
-
-let teams = require('../../nhl data/team light.json');
+let teams = require('../../nhl data/teamLight.json');
 let teamName = [];
 
 function defineDivisions() {
@@ -48,7 +48,9 @@ class Body extends React.Component {
   render() {
     return (
       <div>
+        <DateTimePicker />
         <Filter />
+        <CardSchedule />
       </div>
     );
   }
