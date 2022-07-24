@@ -19,6 +19,7 @@ export interface ITeam {
   commonName: string;
   dateFounded: string;
   divisionId: number;
+  divisionName?: string;
   facebook: string;
   fanEmail: string;
   franchiseId: number;

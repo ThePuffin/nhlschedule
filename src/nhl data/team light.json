@@ -1,5 +1,4 @@
-{
-   "data":[
+[
       {
          "id":1,
          "active":"Y",
@@ -2370,10 +2369,5 @@
          "twitter":"SeattleKraken",
          "venueId":345,
          "wikipediaUrl":"https://en.wikipedia.org/wiki/Seattle_Kraken"
-      },
-
-      
-     
-   ],
-   "total":2582
-}
+      }
+   ]
