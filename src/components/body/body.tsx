@@ -1,5 +1,6 @@
 import axios from 'axios';
 import M from 'materialize-css';
+import moment from 'moment';
 import React from 'react';
 
 import CardSchedule from './cardSchedule/cardSchedule';
@@ -7,6 +8,8 @@ import DateTimePicker from './dateTimePicker/dateTimePicker';
 import Filter from './filter/filter';
 
 const teamsID = [1, 55, 23, 22, 20, 52];
+let startDate = '2022-10-20';
+let endDate = '2022-11-10';
 
 class Body extends React.Component {
   state = {
@@ -21,7 +24,7 @@ class Body extends React.Component {
       this.setState({ teams: resTeams.data.teams });
 
       const resDate = await axios.get(
-        ` https://statsapi.web.nhl.com/api/v1/schedule?site=fr_nhl&startDate=2022-10-20&endDate=2022-11-10&teamId=22`
+        ` https://statsapi.web.nhl.com/api/v1/schedule?site=fr_nhl&startDate=${startDate}&endDate=${endDate}&teamId=22`
       );
       const teamDates = resDate.data.dates.map((date) => {
         date.games = date.games[0];
