@@ -6,7 +6,7 @@ import CardSchedule from './cardSchedule/cardSchedule';
 import DateTimePicker from './dateTimePicker/dateTimePicker';
 import Filter from './filter/filter';
 
-const teamID = [55, 23, 22, 20, 52];
+const teamsID = [1, 55, 23, 22, 20, 52];
 
 class Body extends React.Component {
   state = {
@@ -38,46 +38,58 @@ class Body extends React.Component {
   }
 
   render() {
-    return (
-      <div>
-        <div className="input-field col s12">
-          <p>dateTimePicker</p>
-        </div>
+    if (this.state.teamDates.length && this.state.teams.length) {
+      return (
         <div>
-          <a className="btn-floating btn-large waves-effect waves-light red">
-            <i className="material-icons">add</i>
-          </a>
-
-          <div className="input-field col s12">
-            <select defaultValue="">
-              <option value="" disabled>
-                Choose a team
-              </option>
-              {this.state.teams.map((team) => (
-                <option value={team.franchiseId}>{team.name}</option>
-              ))}
-            </select>
+          <div className="container">
+            <div className="input-field col s12">
+              <p>dateTimePicker</p>
+            </div>
+            <div className="col s12">
+              <a className="btn-floating btn-large waves-effect waves-light red">
+                <i className="material-icons">add</i>
+              </a>
+              <p>add a team</p>
+            </div>
           </div>
-        </div>
-        <div className="input-field col s12">
-          {this.state.teamDates.map((teamDate) => (
+
+          <div className="container">
             <div className="row">
-              <div className="col s12 m6">
-                <div className="card blue-grey darken-1">
-                  <div className="card-content white-text">
-                    <span className="card-title">{teamDate.date}</span>
-                    <p>
-                      "{teamDate.games.teams.away.team.name}" VS "{teamDate.games.teams.home.team.name}"
-                    </p>
-                    <em>at : "{teamDate.games.venue.name}"</em>
+              {teamsID.map((teamId) => (
+                <div className="col s2">
+                  <div>
+                    <div className="input-field ">
+                      <select defaultValue="">
+                        <option value="">{this.state.teams.find((team) => team.id === teamId).name}</option>
+                        {this.state.teams.map((team) => (
+                          <option value={teamId}></option>
+                        ))}
+                      </select>
+                    </div>
+
+                    {this.state.teamDates.map((teamDate) => (
+                      <div className="row">
+                        <div className="col 12">
+                          <div className="card blue-grey darken-1">
+                            <div className="card-content white-text">
+                              <span className="card-title">{teamDate.date}</span>
+                              <p>
+                                "{teamDate.games.teams.away.team.name}" VS "{teamDate.games.teams.home.team.name}"
+                              </p>
+                              <em>at : "{teamDate.games.venue.name}"</em>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 </div>
-              </div>
+              ))}
             </div>
-          ))}
+          </div>
         </div>
-      </div>
-    );
+      );
+    }
   }
 }
 
