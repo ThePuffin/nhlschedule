@@ -56,6 +56,10 @@ class Body extends React.Component {
     M.AutoInit();
   }
 
+  handleChange(event) {
+    console.log({ event });
+  }
+
   render() {
     if (this.state.teamDates.length > 1 && this.state.teams.length > 1) {
       return (
@@ -78,10 +82,9 @@ class Body extends React.Component {
                 <div className="col s2">
                   <div>
                     <div className="input-field ">
-                      <select defaultValue="">
-                        <option value="">{this.state.teams.find((team) => team.id === teamId).name}</option>
+                      <select defaultValue={teamId} onChange={this.handleChange}>
                         {this.state.teams.map((team) => (
-                          <option value={teamId}></option>
+                          <option value={team.id}>{team.name}</option>
                         ))}
                       </select>
                     </div>
