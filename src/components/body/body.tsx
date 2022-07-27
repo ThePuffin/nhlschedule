@@ -19,19 +19,35 @@ class Body extends React.Component {
   async componentDidMount() {
     M.AutoInit();
     try {
+      const teamId = 1;
       const resTeams = await axios.get(`https://statsapi.web.nhl.com/api/v1/teams`);
 
       this.setState({ teams: resTeams.data.teams });
 
       const resDate = await axios.get(
-        ` https://statsapi.web.nhl.com/api/v1/schedule?site=fr_nhl&startDate=${startDate}&endDate=${endDate}&teamId=22`
+        ` https://statsapi.web.nhl.com/api/v1/schedule?site=fr_nhl&startDate=${startDate}&endDate=${endDate}&teamId=${teamId}`
       );
-      const teamDates = resDate.data.dates.map((date) => {
-        date.games = date.games[0];
-        return date;
-      });
+      let teamDates = resDate.data.dates.map((date) => {
+        const arenaName = date.games[0].venue.name;
+        const gameDate = date.date;
+        const awayTeam = date.games[0].teams.away.team.name;
+        const homeTeam = date.games[0].teams.home.team.name;
+        const homeTeamId = date.games[0].teams.home.team.id;
 
-      this.setState({ teamDates });
+        const datas = {
+          gameDate,
+          arenaName,
+          awayTeam,
+          homeTeam,
+        };
+
+        if (teamId === homeTeamId) {
+          return datas;
+        }
+      });
+      teamDates = teamDates.filter((teamDate) => teamDate);
+
+      this.setState({ ...this.state.teamDates, teamDates });
     } catch (error) {
       console.error({ error });
     }
@@ -41,7 +57,7 @@ class Body extends React.Component {
   }
 
   render() {
-    if (this.state.teamDates.length && this.state.teams.length) {
+    if (this.state.teamDates.length > 1 && this.state.teams.length > 1) {
       return (
         <div>
           <div className="container">
@@ -75,11 +91,11 @@ class Body extends React.Component {
                         <div className="col 12">
                           <div className="card blue-grey darken-1">
                             <div className="card-content white-text">
-                              <span className="card-title">{teamDate.date}</span>
+                              <span className="card-title">{teamDate.gameDate}</span>
                               <p>
-                                "{teamDate.games.teams.away.team.name}" VS "{teamDate.games.teams.home.team.name}"
+                                "{teamDate.awayTeam}" VS "{teamDate.homeTeam}"
                               </p>
-                              <em>at : "{teamDate.games.venue.name}"</em>
+                              <em>at : "{teamDate.arenaName}"</em>
                             </div>
                           </div>
                         </div>
