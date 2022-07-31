@@ -8,10 +8,11 @@ import CardSchedule from './cardSchedule/cardSchedule';
 import DateTimePicker from './dateTimePicker/dateTimePicker';
 import Filter from './filter/filter';
 import Selector from './selector/selector';
+import Loader from './loader/loader';
 
 const teamsIdArray = [55, 23, 22, 20, 52];
 let startDate = '2022-10-25';
-let endDate = '2022-11-18';
+let endDate = '2022-11-10';
 const format = 'DD-MM-YYYY';
 
 class Body extends React.Component {
@@ -91,8 +92,9 @@ class Body extends React.Component {
           <div className="container">
             <div className="row">
               {teamsIdArray.map((teamId) => (
-                <div className="col s3">
+                <div className="col s2">
                   <Selector teams={this.state.teams} teamId={teamId} />
+
                   {this.state.schedule[teamId].map((teamDate) => (
                     <CardSchedule teamDate={teamDate} />
                   ))}
@@ -106,6 +108,7 @@ class Body extends React.Component {
       return (
         <div>
           <p>Wait for it ...</p>
+          <Loader />
         </div>
       );
     }
