@@ -7,8 +7,9 @@ import React from 'react';
 import CardSchedule from './cardSchedule/cardSchedule';
 import DateTimePicker from './dateTimePicker/dateTimePicker';
 import Filter from './filter/filter';
+import Selector from './selector/selector';
 
-const teamsIdArray = [1, 55, 23, 22, 20, 52];
+const teamsIdArray = [55, 23, 22, 20, 52];
 let startDate = '2022-10-25';
 let endDate = '2022-11-18';
 const format = 'DD-MM-YYYY';
@@ -90,19 +91,11 @@ class Body extends React.Component {
           <div className="container">
             <div className="row">
               {teamsIdArray.map((teamId) => (
-                <div className="col s2">
-                  <div>
-                    <div className="input-field ">
-                      <select defaultValue={teamId} onChange={this.handleChange}>
-                        {this.state.teams.map((team) => (
-                          <option value={team.id}>{team.name}</option>
-                        ))}
-                      </select>
-                    </div>
-                    {this.state.schedule[teamId].map((teamDate) => (
-                      <CardSchedule teamDate={teamDate} />
-                    ))}
-                  </div>
+                <div className="col s3">
+                  <Selector teams={this.state.teams} teamId={teamId} />
+                  {this.state.schedule[teamId].map((teamDate) => (
+                    <CardSchedule teamDate={teamDate} />
+                  ))}
                 </div>
               ))}
             </div>
