@@ -1,4 +1,5 @@
 import axios from 'axios';
+import isEmpty from 'lodash/isEmpty';
 import M from 'materialize-css';
 import moment from 'moment';
 import React from 'react';
@@ -8,10 +9,14 @@ import DateTimePicker from './dateTimePicker/dateTimePicker';
 import Filter from './filter/filter';
 
 const teamsIdArray = [1, 55, 23, 22, 20, 52];
-let startDate = '2022-10-20';
-let endDate = '2022-11-10';
+let startDate = '2022-10-25';
+let endDate = '2022-11-15';
 
 class Body extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
   state = {
     teams: [],
     schedule: {},
@@ -20,12 +25,15 @@ class Body extends React.Component {
     M.AutoInit();
     try {
       for (const teamId of teamsIdArray) {
+        let begin = moment(startDate);
+        let finish = moment(endDate);
         const resDate = await axios.get(
           ` https://statsapi.web.nhl.com/api/v1/schedule?site=fr_nhl&startDate=${startDate}&endDate=${endDate}&teamId=${teamId}`
         );
+
         let teamDates = resDate.data.dates.map((date) => {
           const arenaName = date.games[0].venue.name;
-          const gameDate = date.date;
+          const gameDate = moment(date.date).format('DD-MM-YYYY');
           const awayTeam = date.games[0].teams.away.team.name;
           const homeTeam = date.games[0].teams.home.team.name;
           const homeTeamId = date.games[0].teams.home.team.id;
@@ -62,12 +70,12 @@ class Body extends React.Component {
   }
 
   render() {
-    if (this.state.teams.length > 1 && Object.keys(this.state.schedule).length > 1) {
+    if (!isEmpty(this.state.teams) && !isEmpty(this.state.schedule)) {
       return (
         <div>
           <div className="container">
             <div className="input-field col s12">
-              <p>dateTimePicker</p>
+              <DateTimePicker />
             </div>
             <div className="col s12">
               <a className="btn-floating btn-large waves-effect waves-light red">
@@ -81,7 +89,6 @@ class Body extends React.Component {
             <div className="row">
               {teamsIdArray.map((teamId) => (
                 <div className="col s2">
-                  <p>coucou</p>
                   <div>
                     <div className="input-field ">
                       <select defaultValue={teamId} onChange={this.handleChange}>
@@ -91,19 +98,7 @@ class Body extends React.Component {
                       </select>
                     </div>
                     {this.state.schedule[teamId].map((teamDate) => (
-                      <div className="row">
-                        <div className="col 12">
-                          <div className="card blue-grey darken-1">
-                            <div className="card-content white-text">
-                              <span className="card-title">{teamDate.gameDate}</span>
-                              <p>
-                                "{teamDate.awayTeam}" VS "{teamDate.homeTeam}"
-                              </p>
-                              <em>at : "{teamDate.arenaName}"</em>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
+                      <CardSchedule teamDate={teamDate} />
                     ))}
                   </div>
                 </div>
@@ -112,16 +107,10 @@ class Body extends React.Component {
           </div>
         </div>
       );
-    } else if (Object.keys(this.state.schedule).length === 0) {
-      return (
-        <div>
-          <p>ici</p>
-        </div>
-      );
     } else {
       return (
         <div>
-          <p>nope</p>
+          <p>Wait for it ...</p>
         </div>
       );
     }
