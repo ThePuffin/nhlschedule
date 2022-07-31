@@ -25,8 +25,6 @@ class Body extends React.Component {
     M.AutoInit();
     try {
       for (const teamId of teamsIdArray) {
-        let begin = moment(startDate);
-        let finish = moment(endDate);
         const resDate = await axios.get(
           ` https://statsapi.web.nhl.com/api/v1/schedule?site=fr_nhl&startDate=${startDate}&endDate=${endDate}&teamId=${teamId}`
         );
