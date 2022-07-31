@@ -11,6 +11,7 @@ import Filter from './filter/filter';
 const teamsIdArray = [1, 55, 23, 22, 20, 52];
 let startDate = '2022-10-25';
 let endDate = '2022-11-18';
+const format = 'DD-MM-YYYY';
 
 class Body extends React.Component {
   constructor(props) {
@@ -18,6 +19,8 @@ class Body extends React.Component {
   }
 
   state = {
+    startValue: startDate,
+    endValue: endDate,
     teams: [],
     schedule: {},
   };
@@ -34,7 +37,7 @@ class Body extends React.Component {
       const scheduleDates = resDate.data.dates;
       for (const scheduleDate of scheduleDates) {
         const games = scheduleDate.games;
-        const gameDate = moment(scheduleDate.date).format('DD-MM-YYYY');
+        const gameDate = moment(scheduleDate.date).format(format);
         activeTeams.forEach((activeTeam) => {
           let datas;
           const team = games.find((game) => game.teams.home.team.id === activeTeam.id);
@@ -74,14 +77,13 @@ class Body extends React.Component {
       return (
         <div>
           <div className="container">
-            <div className="input-field col s12">
-              <DateTimePicker />
-            </div>
-            <div className="col s12">
-              <a className="btn-floating btn-large waves-effect waves-light red">
-                <i className="material-icons">add</i>
-              </a>
-              <p>add a team</p>
+            <div className="row">
+              <div className="input-field col s6">
+                <DateTimePicker date={startDate} format={format} icon={'hourglass_top'} />{' '}
+              </div>
+              <div className="input-field col s6">
+                <DateTimePicker date={endDate} format={format} icon={'hourglass_bottom'} />
+              </div>
             </div>
           </div>
 
