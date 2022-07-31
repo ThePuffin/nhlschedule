@@ -10,7 +10,7 @@ import Filter from './filter/filter';
 
 const teamsIdArray = [1, 55, 23, 22, 20, 52];
 let startDate = '2022-10-25';
-let endDate = '2022-11-15';
+let endDate = '2022-11-18';
 
 class Body extends React.Component {
   constructor(props) {
@@ -24,37 +24,39 @@ class Body extends React.Component {
   async componentDidMount() {
     M.AutoInit();
     try {
-      for (const teamId of teamsIdArray) {
-        const resDate = await axios.get(
-          ` https://statsapi.web.nhl.com/api/v1/schedule?site=fr_nhl&startDate=${startDate}&endDate=${endDate}&teamId=${teamId}`
-        );
-
-        let teamDates = resDate.data.dates.map((date) => {
-          const arenaName = date.games[0].venue.name;
-          const gameDate = moment(date.date).format('DD-MM-YYYY');
-          const awayTeam = date.games[0].teams.away.team.name;
-          const homeTeam = date.games[0].teams.home.team.name;
-          const homeTeamId = date.games[0].teams.home.team.id;
-
-          const datas = {
-            gameDate,
-            arenaName,
-            awayTeam,
-            homeTeam,
-          };
-
-          if (teamId === homeTeamId) {
-            return datas;
-          }
-        });
-        teamDates = teamDates.filter((teamDate) => teamDate);
-
-        this.state.schedule[teamId] = teamDates;
-      }
-
       const resTeams = await axios.get(`https://statsapi.web.nhl.com/api/v1/teams`);
 
-      this.setState({ teams: resTeams.data.teams });
+      const activeTeams = resTeams.data.teams.filter((team) => team.active);
+
+      const resDate = await axios.get(
+        ` https://statsapi.web.nhl.com/api/v1/schedule?site=fr_nhl&startDate=${startDate}&endDate=${endDate}`
+      );
+      const scheduleDates = resDate.data.dates;
+      for (const scheduleDate of scheduleDates) {
+        const games = scheduleDate.games;
+        const gameDate = moment(scheduleDate.date).format('DD-MM-YYYY');
+        activeTeams.forEach((activeTeam) => {
+          let datas;
+          const team = games.find((game) => game.teams.home.team.id === activeTeam.id);
+          if (team) {
+            datas = {
+              gameDate,
+              awayTeam: team.teams.away.team.name,
+              homeTeam: team.teams.home.team.name,
+              arenaName: team.venue.name,
+            };
+          } else {
+            datas = { gameDate };
+          }
+          if (!this.state.schedule[activeTeam.id]) {
+            this.state.schedule[activeTeam.id] = [datas];
+          } else {
+            this.state.schedule[activeTeam.id].push(datas);
+          }
+        });
+      }
+
+      this.setState({ teams: activeTeams });
     } catch (error) {
       console.error({ error });
     }
