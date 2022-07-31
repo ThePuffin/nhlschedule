@@ -7,47 +7,48 @@ import CardSchedule from './cardSchedule/cardSchedule';
 import DateTimePicker from './dateTimePicker/dateTimePicker';
 import Filter from './filter/filter';
 
-const teamsID = [1, 55, 23, 22, 20, 52];
+const teamsIdArray = [1, 55, 23, 22, 20, 52];
 let startDate = '2022-10-20';
 let endDate = '2022-11-10';
 
 class Body extends React.Component {
   state = {
     teams: [],
-    teamDates: [],
+    schedule: {},
   };
   async componentDidMount() {
     M.AutoInit();
     try {
-      const teamId = 1;
+      for (const teamId of teamsIdArray) {
+        const resDate = await axios.get(
+          ` https://statsapi.web.nhl.com/api/v1/schedule?site=fr_nhl&startDate=${startDate}&endDate=${endDate}&teamId=${teamId}`
+        );
+        let teamDates = resDate.data.dates.map((date) => {
+          const arenaName = date.games[0].venue.name;
+          const gameDate = date.date;
+          const awayTeam = date.games[0].teams.away.team.name;
+          const homeTeam = date.games[0].teams.home.team.name;
+          const homeTeamId = date.games[0].teams.home.team.id;
+
+          const datas = {
+            gameDate,
+            arenaName,
+            awayTeam,
+            homeTeam,
+          };
+
+          if (teamId === homeTeamId) {
+            return datas;
+          }
+        });
+        teamDates = teamDates.filter((teamDate) => teamDate);
+
+        this.state.schedule[teamId] = teamDates;
+      }
+
       const resTeams = await axios.get(`https://statsapi.web.nhl.com/api/v1/teams`);
 
       this.setState({ teams: resTeams.data.teams });
-
-      const resDate = await axios.get(
-        ` https://statsapi.web.nhl.com/api/v1/schedule?site=fr_nhl&startDate=${startDate}&endDate=${endDate}&teamId=${teamId}`
-      );
-      let teamDates = resDate.data.dates.map((date) => {
-        const arenaName = date.games[0].venue.name;
-        const gameDate = date.date;
-        const awayTeam = date.games[0].teams.away.team.name;
-        const homeTeam = date.games[0].teams.home.team.name;
-        const homeTeamId = date.games[0].teams.home.team.id;
-
-        const datas = {
-          gameDate,
-          arenaName,
-          awayTeam,
-          homeTeam,
-        };
-
-        if (teamId === homeTeamId) {
-          return datas;
-        }
-      });
-      teamDates = teamDates.filter((teamDate) => teamDate);
-
-      this.setState({ ...this.state.teamDates, teamDates });
     } catch (error) {
       console.error({ error });
     }
@@ -61,7 +62,7 @@ class Body extends React.Component {
   }
 
   render() {
-    if (this.state.teamDates.length > 1 && this.state.teams.length > 1) {
+    if (this.state.teams.length > 1 && Object.keys(this.state.schedule).length > 1) {
       return (
         <div>
           <div className="container">
@@ -78,8 +79,9 @@ class Body extends React.Component {
 
           <div className="container">
             <div className="row">
-              {teamsID.map((teamId) => (
+              {teamsIdArray.map((teamId) => (
                 <div className="col s2">
+                  <p>coucou</p>
                   <div>
                     <div className="input-field ">
                       <select defaultValue={teamId} onChange={this.handleChange}>
@@ -88,8 +90,7 @@ class Body extends React.Component {
                         ))}
                       </select>
                     </div>
-
-                    {this.state.teamDates.map((teamDate) => (
+                    {this.state.schedule[teamId].map((teamDate) => (
                       <div className="row">
                         <div className="col 12">
                           <div className="card blue-grey darken-1">
@@ -109,6 +110,18 @@ class Body extends React.Component {
               ))}
             </div>
           </div>
+        </div>
+      );
+    } else if (Object.keys(this.state.schedule).length === 0) {
+      return (
+        <div>
+          <p>ici</p>
+        </div>
+      );
+    } else {
+      return (
+        <div>
+          <p>nope</p>
         </div>
       );
     }
