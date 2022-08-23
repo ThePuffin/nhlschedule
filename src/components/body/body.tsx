@@ -7,13 +7,17 @@ import React from 'react';
 import CardSchedule from './cardSchedule/cardSchedule';
 import DateTimePicker from './dateTimePicker/dateTimePicker';
 import Filter from './filter/filter';
-import Selector from './selector/selector';
 import Loader from './loader/loader';
+import Selector from './selector/selector';
 
-const teamsIdArray = [55, 23, 22, 20, 52];
+const teamsIdArray = [55, 23, 22, 20, 1];
 let startDate = '2022-10-25';
 let endDate = '2022-11-10';
 const format = 'DD-MM-YYYY';
+
+const callback = (name: string | undefined) => {
+  console.log('callback');
+};
 
 class Body extends React.Component {
   constructor(props) {
@@ -81,19 +85,19 @@ class Body extends React.Component {
           <div className="container">
             <div className="row">
               <div className="input-field col s6">
-                <DateTimePicker date={startDate} format={format} icon={'hourglass_top'} />{' '}
+                <DateTimePicker date={startDate} format={format} icon={'hourglass_top'} name="start" />{' '}
               </div>
               <div className="input-field col s6">
-                <DateTimePicker date={endDate} format={format} icon={'hourglass_bottom'} />
+                <DateTimePicker date={endDate} format={format} icon={'hourglass_bottom'} name="end" />
               </div>
             </div>
           </div>
 
           <div className="container">
             <div className="row">
-              {teamsIdArray.map((teamId) => (
+              {teamsIdArray.map((teamId, index) => (
                 <div className="col s2">
-                  <Selector teams={this.state.teams} teamId={teamId} />
+                  <Selector onClick={callback} index={index} teams={this.state.teams} teamId={teamId} />
 
                   {this.state.schedule[teamId].map((teamDate) => (
                     <CardSchedule teamDate={teamDate} />
