@@ -74,8 +74,11 @@ class Body extends React.Component {
     M.AutoInit();
   }
 
-  handleChange(event) {
-    console.log({ event });
+  handleChange({ index, newValue }) {
+    if (index >= 0 && newValue) {
+      teamsIdArray.splice(index, 1, Number(newValue));
+      console.log(teamsIdArray);
+    }
   }
 
   render() {
@@ -97,7 +100,7 @@ class Body extends React.Component {
             <div className="row">
               {teamsIdArray.map((teamId, index) => (
                 <div className="col s2">
-                  <Selector onClick={callback} index={index} teams={this.state.teams} teamId={teamId} />
+                  <Selector handleChange={this.handleChange} index={index} teams={this.state.teams} teamId={teamId} />
 
                   {this.state.schedule[teamId].map((teamDate) => (
                     <CardSchedule teamDate={teamDate} />

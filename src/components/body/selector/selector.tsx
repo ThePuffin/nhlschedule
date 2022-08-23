@@ -1,16 +1,12 @@
-
-
-
-
-const Selector = (props) => {
+const Selector = ({ teamId, teams, index, handleChange }) => {
   const change = (event) => {
-
-    console.log(props.index, 'teamId', event.target.value);
+    console.log(index, 'teamId', event.target.value);
+    handleChange({ index, newValue: event.target.value });
   };
   return (
-    <div id={props.teamId} className="input-field ">
-      <select onChange={change} id={props.teamId} defaultValue={props.teamId}>
-        {props.teams.map((team) => (
+    <div id={teamId} className="input-field ">
+      <select onChange={change} id={teamId} defaultValue={teamId}>
+        {teams.map((team) => (
           <option value={team.id}>{team.name}</option>
         ))}
       </select>
