@@ -1,18 +1,20 @@
 import moment from 'moment';
 
-const handleChange = (event) => {
-  console.log('date', event.target.value);
-};
-
-const DateTimePicker = (props) => {
+const DateTimePicker = ({ icon, name, date, format, handleChangeDate }) => {
+  const handleChange = (event) => {
+    const newDate = event.target.value;
+    console.log(date);
+    
+    handleChangeDate({ name, newDate });
+  };
   return (
     <div id="dateTime" onClick={handleChange}>
-      <i className="material-icons prefix">{props.icon}</i>
+      <i className="material-icons prefix">{icon}</i>
       <input
-        id={props.name}
+        id={name}
         type="text"
         className="datepicker dateset"
-        defaultValue={moment(props.date).format(props.format)}
+        defaultValue={moment(date).format(format)}
         // onChange={(newDate) => {
         // handleChange({
         //   target: {
