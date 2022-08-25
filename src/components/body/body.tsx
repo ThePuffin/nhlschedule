@@ -60,14 +60,14 @@ class Body extends React.Component {
     }
   };
 
-  async handleChangeTeam({ index, newValue }) {
-    if (index >= 0 && newValue) {
-      newValue = Number(newValue);
-      teamsSelectedIds.splice(index, 1, newValue);
+  async handleChangeTeam({ index, newTeamId }) {
+    if (index >= 0 && newTeamId) {
+      newTeamId = Number(newTeamId);
+      teamsSelectedIds.splice(index, 1, newTeamId);
 
       this.setState({ teamsSelectedIds });
 
-      await this.updateScheduleData({ teamsSelectedId: newValue });
+      await this.updateScheduleData({ teamsSelectedId: newTeamId });
     }
   }
 

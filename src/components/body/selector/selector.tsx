@@ -1,6 +1,6 @@
 const Selector = ({ teamId, teams, index, handleChangeTeam }) => {
   const changeTeam = async (event) => {
-    await handleChangeTeam({ index, newValue: event.target.value });
+    await handleChangeTeam({ index, newTeamId: event.target.value });
   };
   return (
     <div id={teamId} className="input-field ">
