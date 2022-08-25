@@ -9,7 +9,7 @@ import DateTimePicker from './dateTimePicker/dateTimePicker';
 import Loader from './loader/loader';
 import Selector from './selector/selector';
 
-const teamsSelectedIds = [55, 23, 22, 20, 1];
+const defaultTeamsSelectedIds = [55, 23, 22, 20, 1];
 let startDate = '2022-10-25';
 let endDate = '2022-11-10';
 let allDates = [];
@@ -25,7 +25,7 @@ class Body extends React.Component {
     startValue: startDate,
     endValue: endDate,
     teams: [],
-    teamsSelectedIds,
+    teamsSelectedIds: defaultTeamsSelectedIds,
     schedule: {},
   };
   async componentDidMount() {
@@ -39,7 +39,7 @@ class Body extends React.Component {
 
       activeTeams.map((team) => (schedule[team.id] = []));
       this.setState({ schedule });
-      for (const teamsSelectedId of teamsSelectedIds) {
+      for (const teamsSelectedId of this.state.teamsSelectedIds) {
         await this.updateScheduleData({ teamsSelectedId });
       }
       this.setState({ teams: activeTeams });
@@ -63,6 +63,7 @@ class Body extends React.Component {
   async handleChangeTeam({ index, newTeamId }) {
     if (index >= 0 && newTeamId) {
       newTeamId = Number(newTeamId);
+      const teamsSelectedIds = [...this.state.teamsSelectedIds];
       teamsSelectedIds.splice(index, 1, newTeamId);
 
       this.setState({ teamsSelectedIds });
@@ -72,7 +73,7 @@ class Body extends React.Component {
   }
 
   handleChangeDate(event) {
-    this.getAllDates();
+    // this.getAllDates();
     console.log({ event });
   }
 
@@ -116,20 +117,20 @@ class Body extends React.Component {
             <div className="row">
               <div className="input-field col s6">
                 <DateTimePicker
-                  handleChangeDate={this.handleChangeDate}
                   date={startDate}
                   format={format}
                   icon={'hourglass_top'}
                   name="start"
+               
                 />{' '}
               </div>
               <div className="input-field col s6">
                 <DateTimePicker
-                  handleChangeDate={this.handleChangeDate}
                   date={endDate}
                   format={format}
                   icon={'hourglass_bottom'}
                   name="end"
+               
                 />
               </div>
             </div>

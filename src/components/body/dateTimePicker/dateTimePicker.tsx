@@ -1,11 +1,9 @@
 import moment from 'moment';
 
-const DateTimePicker = ({ icon, name, date, format, handleChangeDate }) => {
+const DateTimePicker = ({ icon, name, date, format }) => {
   const handleChange = (event) => {
     const newDate = event.target.value;
     console.log(date);
-    
-    handleChangeDate({ name, newDate });
   };
   return (
     <div id="dateTime" onClick={handleChange}>

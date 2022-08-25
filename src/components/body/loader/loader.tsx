@@ -1,6 +1,6 @@
 import moment from 'moment';
 
-const Loader = (props) => {
+const Loader = () => {
   return (
     <div className="preloader-wrapper big active">
       <div className="spinner-layer spinner-blue">
