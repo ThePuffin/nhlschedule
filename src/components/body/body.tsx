@@ -16,11 +16,16 @@ let allDates = [];
 const format = 'DD-MM-YYYY';
 
 class Body extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleChangeTeam = this.handleChangeTeam.bind(this);
+  }
+
   state = {
     startValue: startDate,
     endValue: endDate,
     teams: [],
-    teamsSelected: teamsSelectedIds,
+    teamsSelectedIds,
     schedule: {},
   };
   async componentDidMount() {
@@ -30,10 +35,13 @@ class Body extends React.Component {
       const resTeams = await axios.get(`https://statsapi.web.nhl.com/api/v1/teams`);
 
       const activeTeams = resTeams.data.teams.filter((team) => team.active);
+      const schedule = { ...this.state.schedule };
+
+      activeTeams.map((team) => (schedule[team.id] = []));
+      this.setState({ schedule });
       for (const teamsSelectedId of teamsSelectedIds) {
         await this.updateScheduleData({ teamsSelectedId });
       }
-
       this.setState({ teams: activeTeams });
     } catch (error) {
       console.error({ error });
@@ -56,9 +64,10 @@ class Body extends React.Component {
     if (index >= 0 && newValue) {
       newValue = Number(newValue);
       teamsSelectedIds.splice(index, 1, newValue);
-      console.log({ teamsSelectedIds });
-      //  this.setState({ teamsSelected: teamsSelectedIds });
-      // await this.updateScheduleData({ teamsSelectedId: newValue });
+
+      this.setState({ teamsSelectedIds });
+
+      await this.updateScheduleData({ teamsSelectedId: newValue });
     }
   }
 
@@ -72,6 +81,8 @@ class Body extends React.Component {
       ` https://statsapi.web.nhl.com/api/v1/schedule?site=fr_nhl&startDate=${this.state.startValue}&endDate=${this.state.endValue}&teamId=${teamsSelectedId}`
     );
     const scheduleDates = resDate.data.dates;
+    const scheduleState = { ...this.state.schedule };
+    scheduleState[teamsSelectedId] = [];
 
     for (const date of allDates) {
       const game = scheduleDates.find((schedule) => moment(schedule.date).format(format) === date);
@@ -91,23 +102,10 @@ class Body extends React.Component {
         }
       }
 
-      // const games = scheduleDate.games;
-
-      // const team = games.find((game) => game.teams.home.team.id === teamsSelectedId);
-      // if (team) {
-      //   datas = {
-      //     gameDate,
-      //     awayTeam: team.teams.away.team.name,
-      //     homeTeam: team.teams.home.team.name,
-      //     arenaName: team.venue.name,
-      //   };
-      // }
-      if (!this.state.schedule[teamsSelectedId]) {
-        this.state.schedule[teamsSelectedId] = [datas];
-      } else {
-        this.state.schedule[teamsSelectedId].push(datas);
-      }
+      scheduleState[teamsSelectedId].push(datas);
     }
+
+    this.setState({ schedule: scheduleState });
   }
 
   render() {
@@ -141,13 +139,7 @@ class Body extends React.Component {
             <div className="row">
               <div className="col s2">
                 <div style={{ visibility: 'hidden' }}>
-                  <Selector
-                    handleChangeTeam={this.handleChangeTeam}
-                    updateScheduleData={this.updateScheduleData}
-                    index={1}
-                    teams={this.state.teams}
-                    teamId={0}
-                  />
+                  <Selector handleChangeTeam={this.handleChangeTeam} index={1} teams={this.state.teams} teamId={0} />
                 </div>
 
                 {allDates.map((gameDate) => (
@@ -158,11 +150,10 @@ class Body extends React.Component {
                   </div>
                 ))}
               </div>
-              {teamsSelectedIds.map((teamId, index) => (
+              {this.state.teamsSelectedIds.map((teamId, index) => (
                 <div className="col s2">
                   <Selector
                     handleChangeTeam={this.handleChangeTeam}
-                    updateScheduleData={this.updateScheduleData}
                     index={index}
                     teams={this.state.teams}
                     teamId={teamId}
