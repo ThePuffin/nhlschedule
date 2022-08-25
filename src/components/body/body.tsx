@@ -117,21 +117,11 @@ class Body extends React.Component {
             <div className="row">
               <div className="input-field col s6">
                 <DateTimePicker
-                  date={startDate}
-                  format={format}
-                  icon={'hourglass_top'}
-                  name="start"
-               
-                />{' '}
+                  dateTimePickerData={{ date: startDate, format, icon: 'hourglass_top', name: 'start' }}
+                />
               </div>
               <div className="input-field col s6">
-                <DateTimePicker
-                  date={endDate}
-                  format={format}
-                  icon={'hourglass_bottom'}
-                  name="end"
-               
-                />
+                <DateTimePicker dateTimePickerData={{ date: endDate, format, icon: 'hourglass_bottom', name: 'end' }} />
               </div>
             </div>
           </div>
