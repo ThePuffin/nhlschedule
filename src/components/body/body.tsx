@@ -13,17 +13,16 @@ const defaultTeamsSelectedIds = [55, 23, 22, 20, 1];
 let startDate = '2022-10-25';
 let endDate = '2022-11-10';
 let allDates = [];
-const format = 'DD-MM-YYYY';
+const userFormat = 'DD-MM-YYYY';
 
 class Body extends React.Component {
   constructor(props) {
     super(props);
     this.handleChangeTeam = this.handleChangeTeam.bind(this);
+    this.handleChangeDate = this.handleChangeDate.bind(this);
   }
 
   state = {
-    startValue: startDate,
-    endValue: endDate,
     teams: [],
     teamsSelectedIds: defaultTeamsSelectedIds,
     schedule: {},
@@ -39,8 +38,8 @@ class Body extends React.Component {
 
       activeTeams.map((team) => (schedule[team.id] = []));
       this.setState({ schedule });
-      for (const teamsSelectedId of this.state.teamsSelectedIds) {
-        await this.updateScheduleData({ teamsSelectedId });
+      for (const teamSelectedId of this.state.teamsSelectedIds) {
+        await this.updateScheduleData({ teamSelectedId });
       }
       this.setState({ teams: activeTeams });
     } catch (error) {
@@ -51,13 +50,14 @@ class Body extends React.Component {
     M.AutoInit();
   }
   getAllDates = () => {
-    let date = moment(this.state.startValue);
+    let date = moment(startDate);
     allDates = [];
 
-    while (moment(date).isSameOrBefore(moment(this.state.endValue))) {
-      allDates.push(moment(date).format(format));
+    while (moment(date).isSameOrBefore(moment(endDate))) {
+      allDates.push(moment(date).format(userFormat));
       date = moment(date).add(1, 'day');
     }
+    console.log({ allDates });
   };
 
   async handleChangeTeam({ index, newTeamId }) {
@@ -68,45 +68,65 @@ class Body extends React.Component {
 
       this.setState({ teamsSelectedIds });
 
-      await this.updateScheduleData({ teamsSelectedId: newTeamId });
+      await this.updateScheduleData({ teamSelectedId: newTeamId });
     }
   }
 
-  handleChangeDate(event) {
-    // this.getAllDates();
-    console.log({ event });
+  async handleChangeDate({ newDate, dateToChange }) {
+    const newDateFormated = newDate.split('-').reverse().join('-');
+
+    if (dateToChange === 'start') {
+      startDate = newDateFormated;
+    } else {
+      if (moment(newDateFormated).isAfter(moment(startDate))) {
+        endDate = newDateFormated;
+      } else {
+        endDate = startDate;
+      }
+    }
+    this.getAllDates();
+    // for (const teamSelectedId of this.state.teamsSelectedIds) {
+      await this.updateScheduleData({ teamSelectedId: this.state.teamsSelectedIds[0] });
+    // }
   }
 
-  async updateScheduleData({ teamsSelectedId }) {
-    const resDate = await axios.get(
-      ` https://statsapi.web.nhl.com/api/v1/schedule?site=fr_nhl&startDate=${this.state.startValue}&endDate=${this.state.endValue}&teamId=${teamsSelectedId}`
-    );
-    const scheduleDates = resDate.data.dates;
-    const scheduleState = { ...this.state.schedule };
-    scheduleState[teamsSelectedId] = [];
+  async updateScheduleData({ teamSelectedId }) {
+    try {
+      console.log({ teamSelectedId });
+      const resDate = await axios.get(
+        ` https://statsapi.web.nhl.com/api/v1/schedule?site=fr_nhl&startDate=${startDate}&endDate=${endDate}&teamId=${teamSelectedId}`
+      );
+      console.log({ resDate });
 
-    for (const date of allDates) {
-      const game = scheduleDates.find((schedule) => moment(schedule.date).format(format) === date);
+      const scheduleDates = resDate.data.dates;
+      const scheduleState = { ...this.state.schedule };
+      scheduleState[teamSelectedId] = [];
 
-      let datas = {};
-      if (game) {
-        const teams = game.games[0].teams;
-        const venue = game.games[0].venue;
+      for (const date of allDates) {
+        const game = scheduleDates.find((schedule) => moment(schedule.date).format(userFormat) === date);
 
-        if (teams.home.team.id === teamsSelectedId) {
-          datas = {
-            awayTeam: teams.away.team.name,
-            homeTeam: teams.home.team.name,
-            arenaName: venue.name,
-            gameDate: game.date,
-          };
+        let datas = {};
+        if (game) {
+          const teams = game.games[0].teams;
+          const venue = game.games[0].venue;
+
+          if (teams.home.team.id === teamSelectedId) {
+            datas = {
+              awayTeam: teams.away.team.name,
+              homeTeam: teams.home.team.name,
+              arenaName: venue.name,
+              gameDate: game.date,
+            };
+          }
         }
+
+        scheduleState[teamSelectedId].push(datas);
       }
 
-      scheduleState[teamsSelectedId].push(datas);
+      this.setState({ schedule: scheduleState });
+    } catch (error) {
+      console.log({ error });
     }
-
-    this.setState({ schedule: scheduleState });
   }
 
   render() {
@@ -117,11 +137,25 @@ class Body extends React.Component {
             <div className="row">
               <div className="input-field col s6">
                 <DateTimePicker
-                  dateTimePickerData={{ date: startDate, format, icon: 'hourglass_top', name: 'start' }}
+                  dateTimePickerData={{
+                    handleChangeDate: this.handleChangeDate,
+                    date: startDate,
+                    format: userFormat,
+                    icon: 'hourglass_top',
+                    name: 'start',
+                  }}
                 />
               </div>
               <div className="input-field col s6">
-                <DateTimePicker dateTimePickerData={{ date: endDate, format, icon: 'hourglass_bottom', name: 'end' }} />
+                <DateTimePicker
+                  dateTimePickerData={{
+                    handleChangeDate: this.handleChangeDate,
+                    date: endDate,
+                    format: userFormat,
+                    icon: 'hourglass_bottom',
+                    name: 'end',
+                  }}
+                />
               </div>
             </div>
           </div>
