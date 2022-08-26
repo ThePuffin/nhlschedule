@@ -23,6 +23,8 @@ class Body extends React.Component {
   }
 
   state = {
+    startDate,
+    endDate,
     teams: [],
     teamsSelectedIds: defaultTeamsSelectedIds,
     schedule: {},
@@ -57,7 +59,6 @@ class Body extends React.Component {
       allDates.push(moment(date).format(userFormat));
       date = moment(date).add(1, 'day');
     }
-    console.log({ allDates });
   };
 
   async handleChangeTeam({ index, newTeamId }) {
@@ -77,6 +78,7 @@ class Body extends React.Component {
 
     if (dateToChange === 'start') {
       startDate = newDateFormated;
+      this.setState({ startDate });
     } else {
       if (moment(newDateFormated).isAfter(moment(startDate))) {
         endDate = newDateFormated;
@@ -86,13 +88,12 @@ class Body extends React.Component {
     }
     this.getAllDates();
     // for (const teamSelectedId of this.state.teamsSelectedIds) {
-      await this.updateScheduleData({ teamSelectedId: this.state.teamsSelectedIds[0] });
+    // await this.updateScheduleData({ teamSelectedId: this.state.teamsSelectedIds[0] });
     // }
   }
 
   async updateScheduleData({ teamSelectedId }) {
     try {
-      console.log({ teamSelectedId });
       const resDate = await axios.get(
         ` https://statsapi.web.nhl.com/api/v1/schedule?site=fr_nhl&startDate=${startDate}&endDate=${endDate}&teamId=${teamSelectedId}`
       );
