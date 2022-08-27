@@ -49,9 +49,9 @@ class Body extends React.Component {
     }
   }
 
-  componentDidUpdate() {
-    M.AutoInit();
-  }
+  // componentDidUpdate() {
+  //   M.AutoInit();
+  // }
 
   getAllDates = () => {
     let date = moment(startDate);
@@ -90,7 +90,7 @@ class Body extends React.Component {
     }
     this.getAllDates();
     for (const teamSelectedId of this.state.teamsSelectedIds) {
-      await this.updateScheduleData({ teamSelectedId: this.state.teamsSelectedIds[0] });
+      await this.updateScheduleData({ teamSelectedId });
     }
   }
 
