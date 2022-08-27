@@ -49,9 +49,9 @@ class Body extends React.Component {
     }
   }
 
-  // componentDidUpdate() {
-  //   M.AutoInit();
-  // }
+  componentDidUpdate() {
+    M.AutoInit();
+  }
 
   getAllDates = () => {
     let date = moment(startDate);
@@ -178,7 +178,7 @@ class Body extends React.Component {
                 ))}
               </div>
               {this.state.teamsSelectedIds.map((teamId, index) => (
-                <div className="input-field col s2">
+                <div className="col s2">
                   <Selector
                     handleChangeTeam={this.handleChangeTeam}
                     index={index}
