@@ -8,6 +8,7 @@ const CardSchedule = (props) => {
       <div className="card-content white-text">
         <span className="card-title">
           {teamDate.awayTeam} / {teamDate.homeTeam}
+          {teamDate.gameDate}
         </span>
         <em>{teamDate.arenaName}</em>
       </div>

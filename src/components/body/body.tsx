@@ -13,7 +13,7 @@ const defaultTeamsSelectedIds = [55, 23, 22, 20, 1];
 let startDate = '2022-10-25';
 let endDate = '2022-11-10';
 let allDates = [];
-const userFormat = 'DD-MM-YYYY';
+const userFormat = 'DD MM YYYY';
 
 class Body extends React.Component {
   constructor(props) {
@@ -48,9 +48,11 @@ class Body extends React.Component {
       console.error({ error });
     }
   }
+
   componentDidUpdate() {
     M.AutoInit();
   }
+
   getAllDates = () => {
     let date = moment(startDate);
     allDates = [];
@@ -74,7 +76,7 @@ class Body extends React.Component {
   }
 
   async handleChangeDate({ newDate, dateToChange }) {
-    const newDateFormated = newDate.split('-').reverse().join('-');
+    const newDateFormated = newDate.split(' ').reverse().join('-');
 
     if (dateToChange === 'start') {
       startDate = newDateFormated;
@@ -87,17 +89,16 @@ class Body extends React.Component {
       }
     }
     this.getAllDates();
-    // for (const teamSelectedId of this.state.teamsSelectedIds) {
-    // await this.updateScheduleData({ teamSelectedId: this.state.teamsSelectedIds[0] });
-    // }
+    for (const teamSelectedId of this.state.teamsSelectedIds) {
+      await this.updateScheduleData({ teamSelectedId: this.state.teamsSelectedIds[0] });
+    }
   }
 
   async updateScheduleData({ teamSelectedId }) {
     try {
       const resDate = await axios.get(
-        ` https://statsapi.web.nhl.com/api/v1/schedule?site=fr_nhl&startDate=${startDate}&endDate=${endDate}&teamId=${teamSelectedId}`
+        ` https://statsapi.web.nhl.com/api/v1/schedule?site=fr_nhl&startDate=${this.state.startDate}&endDate=${this.state.endDate}&teamId=${teamSelectedId}`
       );
-      console.log({ resDate });
 
       const scheduleDates = resDate.data.dates;
       const scheduleState = { ...this.state.schedule };
@@ -164,8 +165,8 @@ class Body extends React.Component {
           <div className="container">
             <div className="row">
               <div className="col s2">
-                <div style={{ visibility: 'hidden' }}>
-                  <Selector handleChangeTeam={this.handleChangeTeam} index={1} teams={this.state.teams} teamId={0} />
+                <div className="input-field" style={{ visibility: 'hidden' }}>
+                  <select id="hiddenSelect"></select>
                 </div>
 
                 {allDates.map((gameDate) => (
@@ -177,7 +178,7 @@ class Body extends React.Component {
                 ))}
               </div>
               {this.state.teamsSelectedIds.map((teamId, index) => (
-                <div className="col s2">
+                <div className="input-field col s2">
                   <Selector
                     handleChangeTeam={this.handleChangeTeam}
                     index={index}
