@@ -168,7 +168,12 @@ class Body extends React.Component {
             <div className="row">
               <div className="col s2">
                 <div style={{ visibility: 'hidden' }}>
-                  <Selector handleChangeTeam={this.handleChangeTeam} index="1" teams={this.state.teams} teamId="1" />
+                  <Selector
+                    handleChangeTeam={this.handleChangeTeam}
+                    index="1"
+                    teams={this.state.teams}
+                    teamIds={this.state.teamsSelectedIds}
+                  />
                 </div>
 
                 {allDates.map((gameDate) => (
@@ -185,7 +190,7 @@ class Body extends React.Component {
                     handleChangeTeam={this.handleChangeTeam}
                     index={index}
                     teams={this.state.teams}
-                    teamId={teamId}
+                    teamIds={this.state.teamsSelectedIds}
                   />
 
                   {this.state.schedule[teamId].map((teamDate) => (
