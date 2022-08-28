@@ -35,7 +35,13 @@ class Body extends React.Component {
     try {
       const resTeams = await axios.get(`https://statsapi.web.nhl.com/api/v1/teams`);
 
-      const activeTeams = resTeams.data.teams.filter((team) => team.active);
+      const activeTeams = resTeams.data.teams
+        .filter((team) => team.active)
+        .map((team) => {
+          team.value = team.id;
+          team.label = team.name;
+          return team;
+        });
       const schedule = { ...this.state.schedule };
 
       activeTeams.map((team) => (schedule[team.id] = []));
@@ -47,10 +53,6 @@ class Body extends React.Component {
     } catch (error) {
       console.error({ error });
     }
-  }
-
-  componentDidUpdate() {
-    M.AutoInit();
   }
 
   getAllDates = () => {
@@ -165,12 +167,12 @@ class Body extends React.Component {
           <div className="container">
             <div className="row">
               <div className="col s2">
-                <div className="input-field" style={{ visibility: 'hidden' }}>
-                  <select id="hiddenSelect"></select>
+                <div style={{ visibility: 'hidden' }}>
+                  <Selector handleChangeTeam={this.handleChangeTeam} index="1" teams={this.state.teams} teamId="1" />
                 </div>
 
                 {allDates.map((gameDate) => (
-                  <div className="card blue-grey darken-3">
+                  <div className="card red darken-3">
                     <div className="card-content white-text">
                       <span className="card-title">{gameDate}</span>
                     </div>
