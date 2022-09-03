@@ -138,7 +138,7 @@ class Body extends React.Component {
       return (
         <div>
           <div className="container">
-            <div className="row">
+            <div className="row" style={{ height: '10vh' }}>
               <div className="input-field col s6">
                 <DateTimePicker
                   dateTimePickerData={{
@@ -164,7 +164,7 @@ class Body extends React.Component {
             </div>
           </div>
 
-          <div className="container">
+          <div className="container" style={{ height: '78vh', overflow: 'auto' }}>
             <div className="row">
               <div className="col s2">
                 <div style={{ visibility: 'hidden' }}>
@@ -184,6 +184,7 @@ class Body extends React.Component {
                   </div>
                 ))}
               </div>
+
               {this.state.teamsSelectedIds.map((teamId, index) => (
                 <div className="col s2">
                   <Selector
