@@ -10,8 +10,19 @@ import Loader from './loader/loader';
 import Selector from './selector/selector';
 
 const defaultTeamsSelectedIds = [55, 23, 22, 20, 1];
-let startDate = '2022-10-25';
-let endDate = '2022-11-10';
+const year = new Date().getFullYear();
+const now = moment();
+const startSeason =
+  now.isBefore(moment(`${year} 08 01`)) && now.isSameOrAfter(moment(`${year} 01 01`))
+    ? moment(`${year - 1} 10 01 `).format('YYYY-MM-DD')
+    : moment(`${year} 10 01 `).format('YYYY-MM-DD');
+const endSeason =
+  now.isAfter(moment(`${year} 08 01`)) && now.isBefore(moment(`${year + 1} 01 01`))
+    ? moment(`${year + 1} 07 01 `).format('YYYY-MM-DD')
+    : moment(`${year} 07 01 `).format('YYYY-MM-DD');
+
+let startDate = moment().isBefore(startSeason) ? startSeason : moment().format('YYYY-MM-DD');
+let endDate = moment(startDate).add(1, 'month').format('YYYY-MM-DD');
 let allDates = [];
 const userFormat = 'DD MM YYYY';
 
@@ -23,14 +34,16 @@ class Body extends React.Component {
   }
 
   state = {
-    startDate,
-    endDate,
+    startDate: startDate,
+    endDate: endDate,
     teams: [],
     teamsSelectedIds: defaultTeamsSelectedIds,
     schedule: {},
   };
   async componentDidMount() {
     this.getAllDates();
+    console.log('+++', this.state.startDate);
+
     M.AutoInit();
     try {
       const resTeams = await axios.get(`https://statsapi.web.nhl.com/api/v1/teams`);
@@ -143,7 +156,7 @@ class Body extends React.Component {
                 <DateTimePicker
                   dateTimePickerData={{
                     handleChangeDate: this.handleChangeDate,
-                    date: startDate,
+                    date: this.state.startDate,
                     format: userFormat,
                     icon: 'hourglass_top',
                     name: 'start',
@@ -154,10 +167,12 @@ class Body extends React.Component {
                 <DateTimePicker
                   dateTimePickerData={{
                     handleChangeDate: this.handleChangeDate,
-                    date: endDate,
+                    date: this.state.endDate,
                     format: userFormat,
                     icon: 'hourglass_bottom',
                     name: 'end',
+                    startSeason,
+                    endSeason,
                   }}
                 />
               </div>
