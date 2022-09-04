@@ -1,5 +1,3 @@
-import moment from 'moment';
-
 const Loader = () => {
   return (
     <div className="preloader-wrapper big active">

@@ -96,12 +96,17 @@ class Body extends React.Component {
     if (dateToChange === 'start') {
       startDate = newDateFormated;
       this.setState({ startDate });
+      if (moment(newDateFormated).isAfter(moment(endDate))) {
+        endDate = moment(newDateFormated).add(1, 'month').format('YYYY-MM-DD');
+        this.setState({ endDate });
+      }
     } else {
       if (moment(newDateFormated).isAfter(moment(startDate))) {
         endDate = newDateFormated;
       } else {
         endDate = startDate;
       }
+      this.setState({ endDate });
     }
     this.getAllDates();
     for (const teamSelectedId of this.state.teamsSelectedIds) {

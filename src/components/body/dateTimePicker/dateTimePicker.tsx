@@ -2,7 +2,7 @@ import M from 'materialize-css';
 import moment from 'moment';
 import React from 'react';
 
-let data, newDate, handleChangeDate, dateToChange, date;
+let data, newDate, handleChangeDate, dateToChange;
 
 export default class DateTimePicker extends React.Component<any> {
   constructor(props) {
