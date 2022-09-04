@@ -42,7 +42,6 @@ class Body extends React.Component {
   };
   async componentDidMount() {
     this.getAllDates();
-    console.log('+++', this.state.startDate);
 
     M.AutoInit();
     try {
@@ -93,21 +92,11 @@ class Body extends React.Component {
   async handleChangeDate({ newDate, dateToChange }) {
     const newDateFormated = newDate.split(' ').reverse().join('-');
 
-    if (dateToChange === 'start') {
-      startDate = newDateFormated;
-      this.setState({ startDate });
-      if (moment(newDateFormated).isAfter(moment(endDate))) {
-        endDate = moment(newDateFormated).add(1, 'month').format('YYYY-MM-DD');
-        this.setState({ endDate });
-      }
-    } else {
-      if (moment(newDateFormated).isAfter(moment(startDate))) {
-        endDate = newDateFormated;
-      } else {
-        endDate = startDate;
-      }
-      this.setState({ endDate });
-    }
+    startDate = newDateFormated;
+    endDate = moment(newDateFormated).add(1, 'month').format('YYYY-MM-DD');
+
+    this.setState({ startDate, endDate });
+
     this.getAllDates();
     for (const teamSelectedId of this.state.teamsSelectedIds) {
       await this.updateScheduleData({ teamSelectedId });
@@ -157,27 +146,16 @@ class Body extends React.Component {
         <div>
           <div className="container">
             <div className="row" style={{ height: '10vh' }}>
-              <div className="input-field col s6">
+              <div className="input-field col s12" id="start">
                 <DateTimePicker
                   dateTimePickerData={{
+                    startSeason,
+                    endSeason,
                     handleChangeDate: this.handleChangeDate,
                     date: this.state.startDate,
                     format: userFormat,
                     icon: 'hourglass_top',
                     name: 'start',
-                  }}
-                />
-              </div>
-              <div className="input-field col s6">
-                <DateTimePicker
-                  dateTimePickerData={{
-                    handleChangeDate: this.handleChangeDate,
-                    date: this.state.endDate,
-                    format: userFormat,
-                    icon: 'hourglass_bottom',
-                    name: 'end',
-                    startSeason,
-                    endSeason,
                   }}
                 />
               </div>
@@ -187,7 +165,7 @@ class Body extends React.Component {
           <div className="container" style={{ height: '78vh', overflow: 'auto' }}>
             <div className="row">
               <div className="col s2">
-                <div style={{ visibility: 'hidden' }}>
+                <div style={{ visibility: 'hidden' }} id="hidden selector">
                   <Selector
                     handleChangeTeam={this.handleChangeTeam}
                     index="1"
@@ -197,7 +175,7 @@ class Body extends React.Component {
                 </div>
 
                 {allDates.map((gameDate) => (
-                  <div className="card red darken-3">
+                  <div className="card red darken-3" id={gameDate}>
                     <div className="card-content white-text">
                       <span className="card-title">{gameDate}</span>
                     </div>
@@ -206,7 +184,7 @@ class Body extends React.Component {
               </div>
 
               {this.state.teamsSelectedIds.map((teamId, index) => (
-                <div className="col s2">
+                <div className="col s2" id={teamId.toString()}>
                   <Selector
                     handleChangeTeam={this.handleChangeTeam}
                     index={index}
