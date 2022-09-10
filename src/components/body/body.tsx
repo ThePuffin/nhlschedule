@@ -43,10 +43,21 @@ class Body extends React.Component {
 
   async componentWillMount() {
     const teamsFromStorage = JSON.parse(localStorage.getItem('defaultTeamsSelectedIds'));
+    const datesFromStorage = JSON.parse(localStorage.getItem('selectedDates'));
 
-    if (teamsFromStorage && teamsFromStorage.length) {
+    if (teamsFromStorage) {
       defaultTeamsSelectedIds = teamsFromStorage;
       this.setState({ teamsSelectedIds: teamsFromStorage });
+    }
+    if (datesFromStorage) {
+      console.log(datesFromStorage);
+      console.log({ startDate });
+
+      startDate = datesFromStorage.startDate;
+      console.log({ startDate });
+      endDate = datesFromStorage.endDate;
+
+      this.setState({ startDate, endDate });
     }
   }
   async componentDidMount() {
@@ -113,6 +124,7 @@ class Body extends React.Component {
     endDate = moment(newDateFormated).add(1, 'month').format('YYYY-MM-DD');
 
     this.setState({ startDate, endDate });
+    localStorage.setItem('selectedDates', JSON.stringify({ startDate, endDate }));
 
     await this.getAllDates();
     for (const teamSelectedId of this.state.teamsSelectedIds) {
