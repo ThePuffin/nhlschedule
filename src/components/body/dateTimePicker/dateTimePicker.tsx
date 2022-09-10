@@ -31,7 +31,10 @@ export default class DateTimePicker extends React.Component<any> {
   }
 
   onDraw(event) {
+    console.log('onDraw1', dateToChange);
+    
     dateToChange = event.el.id;
+    console.log('onDraw2', dateToChange);
   }
 
   close(event) {
@@ -40,7 +43,10 @@ export default class DateTimePicker extends React.Component<any> {
     }
   }
   handleChange(event) {
+    console.log('handleChange1', newDate);
+
     newDate = moment(event).format(data.format);
+    console.log('handleChange2', newDate);
   }
   render() {
     if (this.state) {
