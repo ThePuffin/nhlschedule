@@ -9,7 +9,7 @@ import DateTimePicker from './dateTimePicker/dateTimePicker';
 import Loader from './loader/loader';
 import Selector from './selector/selector';
 
-const defaultTeamsSelectedIds = [55, 23, 22, 20, 1];
+let defaultTeamsSelectedIds = [];
 const year = new Date().getFullYear();
 const now = moment();
 const startSeason =
@@ -40,6 +40,15 @@ class Body extends React.Component {
     teamsSelectedIds: defaultTeamsSelectedIds,
     schedule: {},
   };
+
+  async componentWillMount() {
+    const teamsFromStorage = JSON.parse(localStorage.getItem('defaultTeamsSelectedIds'));
+
+    if (teamsFromStorage.length) {
+      defaultTeamsSelectedIds = teamsFromStorage;
+      this.setState({ teamsSelectedIds: teamsFromStorage });
+    }
+  }
   async componentDidMount() {
     this.getAllDates();
 
@@ -54,9 +63,16 @@ class Body extends React.Component {
           team.label = team.name;
           return team;
         });
+
       const schedule = { ...this.state.schedule };
 
-      activeTeams.map((team) => (schedule[team.id] = []));
+      activeTeams.forEach((team, index) => {
+        schedule[team.id] = [];
+        if (defaultTeamsSelectedIds.length < 5) {
+          defaultTeamsSelectedIds.push(team.value);
+        }
+      });
+
       this.setState({ schedule });
       for (const teamSelectedId of this.state.teamsSelectedIds) {
         await this.updateScheduleData({ teamSelectedId });
@@ -84,6 +100,7 @@ class Body extends React.Component {
       teamsSelectedIds.splice(index, 1, newTeamId);
 
       this.setState({ teamsSelectedIds });
+      localStorage.setItem('defaultTeamsSelectedIds', JSON.stringify(teamsSelectedIds));
 
       await this.updateScheduleData({ teamSelectedId: newTeamId });
     }
@@ -97,7 +114,7 @@ class Body extends React.Component {
 
     this.setState({ startDate, endDate });
 
-    this.getAllDates();
+    await this.getAllDates();
     for (const teamSelectedId of this.state.teamsSelectedIds) {
       await this.updateScheduleData({ teamSelectedId });
     }
