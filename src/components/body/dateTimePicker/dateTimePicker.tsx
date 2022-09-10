@@ -24,9 +24,9 @@ export default class DateTimePicker extends React.Component<any> {
       onDraw: this.onDraw,
       format: data.format.toLowerCase(),
       autoClose: 'true',
-      minDate: new Date(data.startSeason),
-      maxDate: new Date(data.endSeason),
-      defaultDate: new Date(data.date),
+      // minDate: new Date(data.startSeason),
+      // maxDate: new Date(data.endSeason),
+      // defaultDate: new Date(data.date),
     });
   }
 
