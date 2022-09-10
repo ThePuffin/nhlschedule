@@ -44,7 +44,7 @@ class Body extends React.Component {
   async componentWillMount() {
     const teamsFromStorage = JSON.parse(localStorage.getItem('defaultTeamsSelectedIds'));
 
-    if (teamsFromStorage.length) {
+    if (teamsFromStorage && teamsFromStorage.length) {
       defaultTeamsSelectedIds = teamsFromStorage;
       this.setState({ teamsSelectedIds: teamsFromStorage });
     }
