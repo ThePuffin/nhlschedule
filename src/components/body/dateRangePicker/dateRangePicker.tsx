@@ -12,13 +12,14 @@ export default class DateRangePicker extends React.Component<any> {
     super(props);
     data = props.dateTimePickerData;
     dataFormat = data.dataFormat;
-    handleChangeDateRange = data.handleChangeDateRange;
-
     data.key = 'selection';
   }
   state = {
     ...data,
   };
+  componentDidMount() {
+    handleChangeDateRange = this.state.handleChangeDateRange;
+  }
 
   handleSelect = async ({ selection }) => {
     this.setState(selection);

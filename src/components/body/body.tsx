@@ -30,7 +30,7 @@ class Body extends React.Component {
   constructor(props) {
     super(props);
     this.handleChangeTeam = this.handleChangeTeam.bind(this);
-    this.handleChangeDate = this.handleChangeDate.bind(this);
+    this.handleChangeDateRange = this.handleChangeDateRange.bind(this);
   }
 
   state = {
@@ -93,8 +93,6 @@ class Body extends React.Component {
   }
 
   getAllDates = () => {
-    console.log('getAllDates');
-
     let date = moment(startDateSelected);
     const allDates = [];
 
@@ -121,7 +119,6 @@ class Body extends React.Component {
   async handleChangeDateRange({ startDate, endDate }) {
     startDateSelected = startDate;
     endDateSelected = endDate;
-    console.log(startDateSelected, endDateSelected);
 
     await this.getAllDates();
     for (const teamSelectedId of this.state.teamsSelectedIds) {
@@ -168,7 +165,6 @@ class Body extends React.Component {
               arenaName: venue.name,
               gameDate: game.date,
             };
-            console.log({ datas });
           }
         }
 
@@ -177,7 +173,7 @@ class Body extends React.Component {
 
       this.setState({ schedule: scheduleState });
     } catch (error) {
-      console.log({ error });
+      console.error({ error });
     }
   }
 
