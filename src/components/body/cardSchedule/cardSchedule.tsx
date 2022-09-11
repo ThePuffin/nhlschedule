@@ -5,9 +5,11 @@ const CardSchedule = (props) => {
   return (
     <div className={teamDate.arenaName ? 'card blue-grey darken-1' : 'card white '}>
       <div className="card-content white-text">
-        <span className="card-title">
-          {teamDate.awayTeam} / {teamDate.homeTeam}
-        </span>
+        <h5>
+          <span>
+            {teamDate.awayTeam} / {teamDate.homeTeam}
+          </span>
+        </h5>
         <em>{teamDate.arenaName}</em>
       </div>
     </div>
