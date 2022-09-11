@@ -4,7 +4,7 @@ import React from 'react';
 
 let data, newDate, handleChangeDate, dateToChange;
 
-export default class DateTimePicker extends React.Component<any> {
+export default class OldDateTimePicker extends React.Component<any> {
   constructor(props) {
     super(props);
     data = props.dateTimePickerData;

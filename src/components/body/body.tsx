@@ -5,26 +5,26 @@ import moment from 'moment';
 import React from 'react';
 
 import CardSchedule from './cardSchedule/cardSchedule';
-import DateTimePicker from './dateTimePicker/dateTimePicker';
+import DateRangePicker from './dateRangePicker/dateRangePicker';
 import Loader from './loader/loader';
 import Selector from './selector/selector';
 
 let defaultTeamsSelectedIds = [];
+const userFormat = 'DD MM YYYY';
+const dataFormat = 'YYYY-MM-DD';
 const year = new Date().getFullYear();
 const now = moment();
 const startSeason =
   now.isBefore(moment(`${year} 08 01`)) && now.isSameOrAfter(moment(`${year} 01 01`))
-    ? moment(`${year - 1} 10 01 `).format('YYYY-MM-DD')
-    : moment(`${year} 10 01 `).format('YYYY-MM-DD');
+    ? moment(`${year - 1} 10 01 `).format(dataFormat)
+    : moment(`${year} 10 01 `).format(dataFormat);
 const endSeason =
   now.isAfter(moment(`${year} 08 01`)) && now.isBefore(moment(`${year + 1} 01 01`))
-    ? moment(`${year + 1} 07 01 `).format('YYYY-MM-DD')
-    : moment(`${year} 07 01 `).format('YYYY-MM-DD');
+    ? moment(`${year + 1} 07 01 `).format(dataFormat)
+    : moment(`${year} 07 01 `).format(dataFormat);
 
-let startDate = moment().isBefore(startSeason) ? startSeason : moment().format('YYYY-MM-DD');
-let endDate = moment(startDate).add(1, 'month').format('YYYY-MM-DD');
-let allDates = [];
-const userFormat = 'DD MM YYYY';
+let startDateSelected = moment().isBefore(startSeason) ? startSeason : moment().format(dataFormat);
+let endDateSelected = moment(startDateSelected).add(1, 'month').format(dataFormat);
 
 class Body extends React.Component {
   constructor(props) {
@@ -34,11 +34,12 @@ class Body extends React.Component {
   }
 
   state = {
-    startDate: startDate,
-    endDate: endDate,
+    startDate: startDateSelected,
+    endDate: endDateSelected,
     teams: [],
     teamsSelectedIds: defaultTeamsSelectedIds,
     schedule: {},
+    allDates: [startDateSelected],
   };
 
   async componentWillMount() {
@@ -50,14 +51,11 @@ class Body extends React.Component {
       this.setState({ teamsSelectedIds: teamsFromStorage });
     }
     if (datesFromStorage) {
-      console.log(datesFromStorage);
-      console.log({ startDate });
+      startDateSelected = datesFromStorage.startDate;
 
-      startDate = datesFromStorage.startDate;
-      console.log({ startDate });
-      endDate = datesFromStorage.endDate;
+      endDateSelected = datesFromStorage.endDate;
 
-      this.setState({ startDate, endDate });
+      this.setState({ startDateSelected, endDateSelected });
     }
   }
   async componentDidMount() {
@@ -95,13 +93,14 @@ class Body extends React.Component {
   }
 
   getAllDates = () => {
-    let date = moment(startDate);
-    allDates = [];
+    let date = moment(startDateSelected);
+    const allDates = [];
 
-    while (moment(date).isSameOrBefore(moment(endDate))) {
+    while (moment(date).isSameOrBefore(moment(endDateSelected))) {
       allDates.push(moment(date).format(userFormat));
       date = moment(date).add(1, 'day');
     }
+    this.setState({ allDates });
   };
 
   async handleChangeTeam({ index, newTeamId }) {
@@ -117,14 +116,26 @@ class Body extends React.Component {
     }
   }
 
+  async handleChangeDateRange({ startDate, endDate }) {
+    startDateSelected = startDate;
+    endDateSelected = endDate;
+    console.log(startDateSelected, endDateSelected);
+
+    // this.setState({ startDateSelected, endDateSelected });
+
+    // await this.getAllDates();
+    // for (const teamSelectedId of this.state.teamsSelectedIds) {
+    //   await this.updateScheduleData({ teamSelectedId });
+    // }
+  }
   async handleChangeDate({ newDate, dateToChange }) {
     const newDateFormated = newDate.split(' ').reverse().join('-');
 
-    startDate = newDateFormated;
-    endDate = moment(newDateFormated).add(1, 'month').format('YYYY-MM-DD');
+    startDateSelected = newDateFormated;
+    endDateSelected = moment(newDateFormated).add(1, 'month').format(dataFormat);
 
-    this.setState({ startDate, endDate });
-    localStorage.setItem('selectedDates', JSON.stringify({ startDate, endDate }));
+    this.setState({ startDateSelected, endDateSelected });
+    localStorage.setItem('selectedDates', JSON.stringify({ startDateSelected, endDateSelected }));
 
     await this.getAllDates();
     for (const teamSelectedId of this.state.teamsSelectedIds) {
@@ -142,7 +153,7 @@ class Body extends React.Component {
       const scheduleState = { ...this.state.schedule };
       scheduleState[teamSelectedId] = [];
 
-      for (const date of allDates) {
+      for (const date of this.state.allDates) {
         const game = scheduleDates.find((schedule) => moment(schedule.date).format(userFormat) === date);
 
         let datas = {};
@@ -157,6 +168,7 @@ class Body extends React.Component {
               arenaName: venue.name,
               gameDate: game.date,
             };
+            console.log({ datas });
           }
         }
 
@@ -176,15 +188,14 @@ class Body extends React.Component {
           <div className="container">
             <div className="row" style={{ height: '10vh' }}>
               <div className="input-field col s12" id="start">
-                <DateTimePicker
+                <DateRangePicker
                   dateTimePickerData={{
                     startSeason,
                     endSeason,
-                    handleChangeDate: this.handleChangeDate,
-                    date: this.state.startDate,
-                    format: userFormat,
-                    icon: 'hourglass_top',
-                    name: 'start',
+                    handleChangeDateRange: this.handleChangeDateRange,
+                    startDate: this.state.startDate,
+                    endDate: this.state.endDate,
+                    dataFormat: dataFormat,
                   }}
                 />
               </div>
@@ -203,7 +214,7 @@ class Body extends React.Component {
                   />
                 </div>
 
-                {allDates.map((gameDate) => (
+                {this.state.allDates.map((gameDate) => (
                   <div className="card red darken-3" id={gameDate}>
                     <div className="card-content white-text">
                       <span className="card-title">{gameDate}</span>
