@@ -55,7 +55,7 @@ class Body extends React.Component {
 
       endDateSelected = datesFromStorage.endDate;
 
-      this.setState({ startDateSelected, endDateSelected });
+      this.setState({ startDate: startDateSelected, endDate: endDateSelected });
     }
   }
   async componentDidMount() {
@@ -93,6 +93,8 @@ class Body extends React.Component {
   }
 
   getAllDates = () => {
+    console.log('getAllDates');
+
     let date = moment(startDateSelected);
     const allDates = [];
 
@@ -121,12 +123,10 @@ class Body extends React.Component {
     endDateSelected = endDate;
     console.log(startDateSelected, endDateSelected);
 
-    // this.setState({ startDateSelected, endDateSelected });
-
-    // await this.getAllDates();
-    // for (const teamSelectedId of this.state.teamsSelectedIds) {
-    //   await this.updateScheduleData({ teamSelectedId });
-    // }
+    await this.getAllDates();
+    for (const teamSelectedId of this.state.teamsSelectedIds) {
+      await this.updateScheduleData({ teamSelectedId });
+    }
   }
   async handleChangeDate({ newDate, dateToChange }) {
     const newDateFormated = newDate.split(' ').reverse().join('-');
