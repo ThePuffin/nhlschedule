@@ -211,11 +211,7 @@ class Body extends React.Component {
                 </div>
 
                 {this.state.allDates.map((gameDate) => (
-                  <div className="card red darken-3" id={gameDate}>
-                    <div className="card-content white-text">
-                      <span className="card-title">{gameDate}</span>
-                    </div>
-                  </div>
+                  <CardSchedule gameDate={gameDate} />
                 ))}
               </div>
 

@@ -1,18 +1,28 @@
 import './cardSchedule.css';
 
 const CardSchedule = (props) => {
-  const teamDate = props.teamDate;
-  return (
-    <div className={teamDate.arenaName ? 'card blue-grey darken-1' : 'card white '}>
-      <div className="card-content white-text">
+  const data = props.teamDate ? props.teamDate : props.gameDate;
+
+  if (props.teamDate) {
+    return (
+      <div className={data.arenaName ? 'card backGroundColorGame' : 'card '}>
         <h5>
           <span>
-            {teamDate.awayTeam} / {teamDate.homeTeam}
+            {data.awayTeam} / {data.homeTeam}
           </span>
         </h5>
-        <em>{teamDate.arenaName}</em>
+
+        <em>{data.arenaName}</em>
       </div>
-    </div>
-  );
+    );
+  } else {
+    return (
+      <div className="card backGroundColorDate">
+        <h4>
+          <span>{data}</span>
+        </h4>
+      </div>
+    );
+  }
 };
 export default CardSchedule;
