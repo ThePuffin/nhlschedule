@@ -6,21 +6,21 @@ const CardSchedule = (props) => {
   if (props.teamDate) {
     return (
       <div className={data.arenaName ? 'card cardGame' : 'card '}>
-        <h4>
-          {data.awayTeam}
-          <br />
-          {data.homeTeam}
-        </h4>
-
-        <em>{data.arenaName}</em>
+        <div className="ext-box">
+          <h4>{data.awayTeam}</h4>
+          <p>vs</p>
+          <h4>{data.homeTeam}</h4>
+          <p> {data.arenaName}</p>
+        </div>
       </div>
     );
   } else {
     return (
       <div className="card cardDate">
-        <h4>
-          <span>{data}</span>
-        </h4>
+        <div className="ext-box">
+          <h3>{data}</h3>
+          <br />
+        </div>
       </div>
     );
   }

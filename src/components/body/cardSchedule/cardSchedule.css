@@ -1,25 +1,35 @@
 * {
-  font-size: 1 vh;
-}
+ font-size: medium;
+ }
 
+.ext-box{
+    display: table-cell;
+    vertical-align: middle;
+}
+  
 .card {
- height: 100%;
+  justify-content: center;
+  height: 95%;
+  text-align: center;
   color: white;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
   width: 100%;
-  text-align: center;
-  margin: auto;
   background-color: white;
-  
-}
-h4{
-  font-size: medium;
-  font-weight: bolder;
+  display: flex;
+  align-items: center;
+
 }
 
-em{
-  font-size: small;
+h4{
+  font-size: large;
+  font-weight:bold;
 }
+
+h3 {
+  font-size: large;
+  font-weight: bold;
+}
+
 
 .cardGame{
   background-color: gray;
@@ -27,4 +37,10 @@ em{
 
 .cardDate {
   background-color: darkgray;
+}
+
+
+p{
+  font-size: small;
+  line-height: 0px;
 }
