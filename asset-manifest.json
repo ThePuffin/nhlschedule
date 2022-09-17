@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/nhlschedule/static/css/main.a89109fe.css",
-    "main.js": "/nhlschedule/static/js/main.b72aecba.js",
+    "main.js": "/nhlschedule/static/js/main.8bbbb2fa.js",
     "static/js/787.76419763.chunk.js": "/nhlschedule/static/js/787.76419763.chunk.js",
     "index.html": "/nhlschedule/index.html",
     "main.a89109fe.css.map": "/nhlschedule/static/css/main.a89109fe.css.map",
-    "main.b72aecba.js.map": "/nhlschedule/static/js/main.b72aecba.js.map",
+    "main.8bbbb2fa.js.map": "/nhlschedule/static/js/main.8bbbb2fa.js.map",
     "787.76419763.chunk.js.map": "/nhlschedule/static/js/787.76419763.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.a89109fe.css",
-    "static/js/main.b72aecba.js"
+    "static/js/main.8bbbb2fa.js"
   ]
 }
