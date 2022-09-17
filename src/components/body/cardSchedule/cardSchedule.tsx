@@ -5,19 +5,19 @@ const CardSchedule = (props) => {
 
   if (props.teamDate) {
     return (
-      <div className={data.arenaName ? 'card backGroundColorGame' : 'card '}>
-        <h5>
+      <div className={data.arenaName ? 'card cardGame' : 'card '}>
+        <h4>
           <span>
             {data.awayTeam} / {data.homeTeam}
           </span>
-        </h5>
+        </h4>
 
         <em>{data.arenaName}</em>
       </div>
     );
   } else {
     return (
-      <div className="card backGroundColorDate">
+      <div className="card cardDate">
         <h4>
           <span>{data}</span>
         </h4>

@@ -201,7 +201,7 @@ class Body extends React.Component {
           <div className="container" style={{ height: '78vh', overflow: 'auto' }}>
             <div className="row">
               <div className="col s2">
-                <div style={{ visibility: 'hidden' }} id="hidden selector">
+                <div style={{ visibility: 'hidden', height: '8vh' }} id="hidden selector">
                   <Selector
                     handleChangeTeam={this.handleChangeTeam}
                     index="1"
@@ -211,21 +211,27 @@ class Body extends React.Component {
                 </div>
 
                 {this.state.allDates.map((gameDate) => (
-                  <CardSchedule gameDate={gameDate} />
+                  <div style={{ height: '20vh' }}>
+                    <CardSchedule gameDate={gameDate} />
+                  </div>
                 ))}
               </div>
 
               {this.state.teamsSelectedIds.map((teamId, index) => (
-                <div className="col s2" id={teamId.toString()}>
-                  <Selector
-                    handleChangeTeam={this.handleChangeTeam}
-                    index={index}
-                    teams={this.state.teams}
-                    teamIds={this.state.teamsSelectedIds}
-                  />
+                <div className="col s2">
+                  <div style={{ height: '8vh' }} id={teamId.toString()}>
+                    <Selector
+                      handleChangeTeam={this.handleChangeTeam}
+                      index={index}
+                      teams={this.state.teams}
+                      teamIds={this.state.teamsSelectedIds}
+                    />
+                  </div>
 
                   {this.state.schedule[teamId].map((teamDate) => (
-                    <CardSchedule teamDate={teamDate} />
+                    <div style={{ height: '20vh' }}>
+                      <CardSchedule teamDate={teamDate} />
+                    </div>
                   ))}
                 </div>
               ))}
