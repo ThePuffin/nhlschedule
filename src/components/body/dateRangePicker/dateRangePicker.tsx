@@ -40,10 +40,10 @@ export default class DateRangePicker extends React.Component<any> {
   };
 
   render() {
-    if (this.state?.startDate && this.state.endDate) {
+    if (data?.startDate && data.endDate) {
       const selectionRange = {
-        startDate: new Date(this.state.startDate),
-        endDate: new Date(this.state.endDate),
+        startDate: new Date(data.startDate),
+        endDate: new Date(data.endDate),
         key: 'selection',
       };
       if (this.state.showPicker) {
