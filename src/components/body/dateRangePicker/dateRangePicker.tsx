@@ -40,7 +40,7 @@ export default class DateRangePicker extends React.Component<any> {
   };
 
   render() {
-    if (this.state) {
+    if (this.state?.startDate && this.state.endDate) {
       const selectionRange = {
         startDate: new Date(this.state.startDate),
         endDate: new Date(this.state.endDate),
@@ -75,6 +75,12 @@ export default class DateRangePicker extends React.Component<any> {
           </div>
         );
       }
+    } else {
+      return (
+        <div>
+          <p>no state date</p>
+        </div>
+      );
     }
   }
 }
