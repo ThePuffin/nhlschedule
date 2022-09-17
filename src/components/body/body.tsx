@@ -40,6 +40,7 @@ class Body extends React.Component {
     teamsSelectedIds: defaultTeamsSelectedIds,
     schedule: {},
     allDates: [startDateSelected],
+    showPicker: false,
   };
 
   async componentWillMount() {
@@ -119,21 +120,9 @@ class Body extends React.Component {
   async handleChangeDateRange({ startDate, endDate }) {
     startDateSelected = startDate;
     endDateSelected = endDate;
+    this.setState({ startDate: startDateSelected, endDate: endDateSelected, showPicker: false });
 
-    await this.getAllDates();
-    for (const teamSelectedId of this.state.teamsSelectedIds) {
-      await this.updateScheduleData({ teamSelectedId });
-    }
-  }
-  async handleChangeDate({ newDate, dateToChange }) {
-    const newDateFormated = newDate.split(' ').reverse().join('-');
-
-    startDateSelected = newDateFormated;
-    endDateSelected = moment(newDateFormated).add(1, 'month').format(dataFormat);
-
-    this.setState({ startDateSelected, endDateSelected });
-    localStorage.setItem('selectedDates', JSON.stringify({ startDateSelected, endDateSelected }));
-
+    localStorage.setItem('selectedDates', JSON.stringify({ startDate: startDateSelected, endDate: endDateSelected }));
     await this.getAllDates();
     for (const teamSelectedId of this.state.teamsSelectedIds) {
       await this.updateScheduleData({ teamSelectedId });
@@ -178,22 +167,41 @@ class Body extends React.Component {
   }
 
   render() {
+    let dateChoice;
+    if (this.state.showPicker) {
+      dateChoice = (
+        <DateRangePicker
+          dateTimePickerData={{
+            startSeason,
+            endSeason,
+            handleChangeDateRange: this.handleChangeDateRange,
+            startDate: this.state.startDate,
+            endDate: this.state.endDate,
+            dataFormat: dataFormat,
+          }}
+        />
+      );
+    } else {
+      dateChoice = (
+        <button
+          className="dateButton"
+          type="button"
+          onClick={() => {
+            this.setState({ showPicker: true });
+          }}
+        >
+          Change date
+        </button>
+      );
+    }
+
     if (!isEmpty(this.state.teams) && !isEmpty(this.state.schedule)) {
       return (
         <div>
           <div className="container">
             <div className="row" style={{ height: '10vh' }}>
               <div className="input-field col s12" id="start">
-                <DateRangePicker
-                  dateTimePickerData={{
-                    startSeason,
-                    endSeason,
-                    handleChangeDateRange: this.handleChangeDateRange,
-                    startDate: this.state.startDate,
-                    endDate: this.state.endDate,
-                    dataFormat: dataFormat,
-                  }}
-                />
+                {dateChoice}
               </div>
             </div>
           </div>

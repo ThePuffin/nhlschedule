@@ -18,7 +18,6 @@ export default class DateRangePicker extends React.Component<any> {
   }
   state = {
     ...data,
-    showPicker: false,
   };
   componentDidMount() {
     handleChangeDateRange = this.state.handleChangeDateRange;
@@ -34,7 +33,7 @@ export default class DateRangePicker extends React.Component<any> {
 
       localStorage.setItem('selectedDates', JSON.stringify({ startDate, endDate }));
       count = 0;
-      this.setState({ showPicker: false });
+
       await handleChangeDateRange({ startDate, endDate });
     }
   };
@@ -42,39 +41,24 @@ export default class DateRangePicker extends React.Component<any> {
   render() {
     if (data?.startDate && data.endDate) {
       const selectionRange = {
-        startDate: new Date(data.startDate),
-        endDate: new Date(data.endDate),
+        startDate: new Date(this.state.startDate),
+        endDate: new Date(this.state.endDate),
         key: 'selection',
       };
-      if (this.state.showPicker) {
-        return (
-          <div>
-            <DateRange
-              onChange={this.handleSelect}
-              ranges={[selectionRange]}
-              minDate={new Date(data.startSeason)}
-              maxDate={new Date(data.endSeason)}
-              showMonthAndYearPickers={false}
-              moveRangeOnFirstSelection={false}
-              editableDateInputs={true}
-            />
-          </div>
-        );
-      } else {
-        return (
-          <div>
-            <button
-              className="dateButton"
-              type="button"
-              onClick={() => {
-                this.setState({ showPicker: true });
-              }}
-            >
-              Change date
-            </button>
-          </div>
-        );
-      }
+
+      return (
+        <div>
+          <DateRange
+            onChange={this.handleSelect}
+            ranges={[selectionRange]}
+            minDate={new Date(data.startSeason)}
+            maxDate={new Date(data.endSeason)}
+            showMonthAndYearPickers={false}
+            moveRangeOnFirstSelection={false}
+            editableDateInputs={true}
+          />
+        </div>
+      );
     } else {
       return (
         <div>
