@@ -219,7 +219,7 @@ class Body extends React.Component {
                 </div>
 
                 {this.state.allDates.map((gameDate) => (
-                  <div style={{ height: '20vh' }}>
+                  <div style={{ height: '25vh' }}>
                     <CardSchedule gameDate={gameDate} />
                   </div>
                 ))}
@@ -237,7 +237,7 @@ class Body extends React.Component {
                   </div>
 
                   {this.state.schedule[teamId].map((teamDate) => (
-                    <div style={{ height: '20vh' }}>
+                    <div style={{ height: '25vh' }}>
                       <CardSchedule teamDate={teamDate} />
                     </div>
                   ))}
