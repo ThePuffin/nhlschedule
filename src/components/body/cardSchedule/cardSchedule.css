@@ -1,5 +1,5 @@
 * {
-  font-size: small;
+  font-size: 1 vh;
 }
 
 .card {
@@ -11,6 +11,14 @@
   margin: auto;
   background-color: white;
   
+}
+h4{
+  font-size: medium;
+  font-weight: bolder;
+}
+
+em{
+  font-size: small;
 }
 
 .cardGame{

@@ -7,9 +7,9 @@ const CardSchedule = (props) => {
     return (
       <div className={data.arenaName ? 'card cardGame' : 'card '}>
         <h4>
-          <span>
-            {data.awayTeam} / {data.homeTeam}
-          </span>
+          {data.awayTeam}
+          <br />
+          {data.homeTeam}
         </h4>
 
         <em>{data.arenaName}</em>
