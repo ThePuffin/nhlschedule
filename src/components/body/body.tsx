@@ -201,8 +201,7 @@ class Body extends React.Component {
       return (
         <div>
           <div className="container">
-            {/* <div className="row" style={{ height: '10vh' }}> */}
-            <div className="row">
+            <div className="row" style={{ height: '10vh' }}>
               <div className="input-field col 10" id="changeDate">
                 {dateChoice}
               </div>
