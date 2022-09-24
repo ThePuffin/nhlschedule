@@ -7,10 +7,10 @@ const CardSchedule = (props) => {
     return (
       <div className={data.arenaName ? 'card cardGame' : 'card '}>
         <div className="ext-box">
-          <h4>{data.awayTeam}</h4>
-          <p>vs</p>
-          <h4>{data.homeTeam}</h4>
-          <p> {data.arenaName}</p>
+          <h4 className="cardText">{data.awayTeam}</h4>
+          <p className="cardText">vs</p>
+          <h4 className="cardText">{data.homeTeam}</h4>
+          <p className="cardText"> {data.arenaName}</p>
         </div>
       </div>
     );
@@ -18,7 +18,7 @@ const CardSchedule = (props) => {
     return (
       <div className="card cardDate">
         <div className="ext-box">
-          <h3>{data}</h3>
+          <h3 className="cardText">{data}</h3>
           <br />
         </div>
       </div>

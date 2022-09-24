@@ -1,13 +1,12 @@
-* {
- font-size: medium;
- }
+
 
 .ext-box{
-    display: table-cell;
-    vertical-align: middle;
+  display: table-cell;
+  vertical-align: middle;
 }
-  
+
 .card {
+  font-size: medium;
   justify-content: center;
   height: 95%;
   text-align: center;
@@ -20,6 +19,7 @@
 
 }
 
+@media only screen and (min-width: 500px) {
 h4{
   font-size: large;
   font-weight:bold;
@@ -28,7 +28,7 @@ h4{
 h3 {
   font-size: large;
   font-weight: bold;
-}
+}}
 
 
 .cardGame{
@@ -44,3 +44,9 @@ p{
   font-size: small;
   line-height: 0px;
 }
+
+ @media only screen and (max-width: 500px) {
+  .cardText{
+    font-size:x-small;
+  }
+ }
