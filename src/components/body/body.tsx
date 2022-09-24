@@ -151,7 +151,7 @@ class Body extends React.Component {
             datas = {
               awayTeam: teams.away.team.name,
               homeTeam: teams.home.team.name,
-              arenaName: venue.name,
+              arenaName: venue.name || '',
               gameDate: game.date,
             };
           }
@@ -190,7 +190,9 @@ class Body extends React.Component {
             this.setState({ showPicker: true });
           }}
         >
-          Change date
+          <p>
+            <i className="material-icons">event</i>
+          </p>
         </button>
       );
     }
@@ -199,8 +201,9 @@ class Body extends React.Component {
       return (
         <div>
           <div className="container">
-            <div className="row" style={{ height: '10vh' }}>
-              <div className="input-field col s12" id="start">
+            {/* <div className="row" style={{ height: '10vh' }}> */}
+            <div className="row">
+              <div className="input-field col 10" id="changeDate">
                 {dateChoice}
               </div>
             </div>
