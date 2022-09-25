@@ -1,5 +1,7 @@
 import './cardSchedule.css';
 
+import moment from 'moment';
+
 const CardSchedule = (props) => {
   const data = props.teamDate ? props.teamDate : props.gameDate;
 
@@ -18,6 +20,7 @@ const CardSchedule = (props) => {
     return (
       <div className="card cardDate">
         <div className="ext-box">
+          <p className="cardText">{moment(data.split(' ').reverse().join(' ')).format('dddd')} </p>
           <h3 className="cardText">{data}</h3>
           <br />
         </div>
