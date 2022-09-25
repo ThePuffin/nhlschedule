@@ -10,14 +10,12 @@
   justify-content: center;
   height: 95%;
   text-align: center;
-  color: white;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
   width: 100%;
-  background-color: white;
   display: flex;
   align-items: center;
-
 }
+
 
 @media only screen and (min-width: 500px) {
 h4{
@@ -33,10 +31,16 @@ h3 {
 
 .cardGame{
   background-color: gray;
+  color: gray;
+}
+.whiteCard {
+  background-color: white;
+  color: white;
 }
 
 .cardDate {
-  background-color: darkgray;
+  background-color: gray;
+  color: white;
 }
 
 

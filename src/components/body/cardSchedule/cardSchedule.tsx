@@ -1,4 +1,5 @@
 import './cardSchedule.css';
+import './colorsTeam.css';
 
 import moment from 'moment';
 
@@ -7,7 +8,7 @@ const CardSchedule = (props) => {
 
   if (props.teamDate) {
     return (
-      <div className={data.arenaName && data.show ? 'card cardGame' : 'card '}>
+      <div className={data.arenaName && data.show ? `card cardGame t${data.homeTeamId}` : 'card whiteCard'}>
         <div className="ext-box">
           <h4 className="cardText">{data.awayTeamShort}</h4>
           <p className="cardText">vs</p>
