@@ -1,4 +1,5 @@
-.dateButton {
+
+.selectButton {
     border: 0;
     line-height: 2.5;
     padding: 0 20px;
@@ -7,8 +8,7 @@
     color: #fff;
     text-shadow: 1px 1px 1px #000;
     border-radius: 10px;
-    background-color: red;
-    background-image: linear-gradient(to top left,
+     background-image: linear-gradient(to top left,
             rgba(0, 0, 0, .2),
             rgba(0, 0, 0, .2) 30%,
             rgba(0, 0, 0, 0));
@@ -16,7 +16,19 @@
         inset -2px -2px 3px rgba(0, 0, 0, .6);
 }
 
+.dateButton {
+     background-color: red;
+}
+
 .dateButton:hover {
     background-color: rgba(255, 0, 0, 1);
 }
 
+.inactiveButton {
+    background-color: grey;
+    color: darkgray;
+}
+.activeButton {
+      background-color: darkgray;
+      color: white;
+}

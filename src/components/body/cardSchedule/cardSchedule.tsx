@@ -7,7 +7,7 @@ const CardSchedule = (props) => {
 
   if (props.teamDate) {
     return (
-      <div className={data.arenaName ? 'card cardGame' : 'card '}>
+      <div className={data.arenaName && data.show ? 'card cardGame' : 'card '}>
         <div className="ext-box">
           <h4 className="cardText">{data.awayTeamShort}</h4>
           <p className="cardText">vs</p>

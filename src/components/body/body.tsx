@@ -41,6 +41,8 @@ class Body extends React.Component {
     schedule: {},
     allDates: [startDateSelected],
     showPicker: false,
+    showHome: true,
+    showAway: false,
   };
 
   async componentWillMount() {
@@ -60,7 +62,7 @@ class Body extends React.Component {
     }
   }
   async componentDidMount() {
-    this.getAllDates();
+    await this.getAllDates();
 
     M.AutoInit();
     try {
@@ -93,7 +95,7 @@ class Body extends React.Component {
     }
   }
 
-  getAllDates = () => {
+  async getAllDates() {
     let date = moment(startDateSelected);
     const allDates = [];
 
@@ -102,7 +104,7 @@ class Body extends React.Component {
       date = moment(date).add(1, 'day');
     }
     this.setState({ allDates });
-  };
+  }
 
   async handleChangeTeam({ index, newTeamId }) {
     if (index >= 0 && newTeamId) {
@@ -147,15 +149,20 @@ class Body extends React.Component {
           const teams = game.games[0].teams;
           const venue = game.games[0].venue;
 
-          if (teams.home.team.id === teamSelectedId) {
+          if (teams.home.team.id === teamSelectedId || teams.away.team.id === teamSelectedId) {
             datas = {
-              awayTeam: teams.away.team.name,
+              awayTeamId: teams.away.team.id,
               awayTeamShort: this.state.teams.find((team) => team.id === teams.away.team.id).franchise?.teamName,
-              homeTeam: teams.home.team.name,
-              homeTeamShort: this.state.teams.find((team) => team.id === teamSelectedId).franchise?.teamName,
+              homeTeamId: teams.home.team.id,
+              homeTeamShort: this.state.teams.find((team) => team.id === teams.home.team.id).franchise?.teamName,
               arenaName: venue.name || '',
               gameDate: game.date,
+              teamSelectedId,
               timestampDate: new Date(game.date).getTime(),
+              show:
+                (teams.home.team.id === teamSelectedId && this.state.showHome) ||
+                (teams.away.team.id === teamSelectedId && this.state.showAway),
+              selectedTeam: teams.home.team.id === teamSelectedId ? true : false,
             };
           }
         }
@@ -163,10 +170,48 @@ class Body extends React.Component {
         scheduleState[teamSelectedId].push(datas);
       }
 
-      this.setState({ schedule: scheduleState });
+      await this.setState({ schedule: scheduleState });
     } catch (error) {
       console.error({ error });
     }
+  }
+
+  async switchButton(showType) {
+    let showHome = this.state.showHome;
+    let showAway = this.state.showAway;
+    if (showType === 'away') {
+      showAway = !showAway;
+
+      await this.setState({ showAway });
+    }
+
+    if (showType === 'home') {
+      showHome = !showHome;
+
+      await this.setState({ showHome });
+    }
+    await this.updateVisibility();
+  }
+
+  async updateVisibility() {
+    const newSchedule = this.state.schedule;
+
+    for (const team in newSchedule) {
+      if (newSchedule[team].length) {
+        newSchedule[team] = newSchedule[team].map((game) => {
+          if (game.homeTeamId) {
+            game.show =
+              (Number(game.homeTeamId) === Number(team) && this.state.showHome) ||
+              (Number(game.awayTeamId) === Number(team) && this.state.showAway);
+
+            return game;
+          } else {
+            return {};
+          }
+        });
+      }
+    }
+    await this.setState({ schedule: newSchedule });
   }
 
   render() {
@@ -193,10 +238,10 @@ class Body extends React.Component {
         <div className="row" style={{ height: '10vh' }}>
           <div className="input-field col 4" id="buttonsDateAndPlace">
             <button
-              className="dateButton"
+              className="dateButton selectButton"
               type="button"
-              onClick={() => {
-                this.setState({ showPicker: true });
+              onClick={async () => {
+                await this.setState({ showPicker: true });
               }}
             >
               <p>
@@ -204,20 +249,32 @@ class Body extends React.Component {
               </p>
             </button>
           </div>
-          {/* <div className="input-field col 4" id="changeDate">
-            <button className="homeButton" type="button">
+          <div className="input-field col 4" id="changeDate">
+            <button
+              className={this.state.showHome ? 'activeButton selectButton' : 'inactiveButton selectButton'}
+              onClick={async () => {
+                await this.switchButton('home');
+              }}
+              type="button"
+            >
               <p>
                 <i className="material-icons">home</i>
               </p>
             </button>
           </div>
           <div className="input-field col 4" id="changeDate">
-            <button className="awayButton" type="button">
+            <button
+              className={this.state.showAway ? 'activeButton selectButton' : 'inactiveButton selectButton'}
+              onClick={async () => {
+                await this.switchButton('away');
+              }}
+              type="button"
+            >
               <p>
                 <i className="material-icons">flight_takeoff</i>
               </p>
             </button>
-          </div> */}
+          </div>
         </div>
       );
     }
