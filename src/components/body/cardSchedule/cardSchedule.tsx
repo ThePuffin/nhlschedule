@@ -9,9 +9,9 @@ const CardSchedule = (props) => {
     return (
       <div className={data.arenaName ? 'card cardGame' : 'card '}>
         <div className="ext-box">
-          <h4 className="cardText">{data.awayTeam}</h4>
+          <h4 className="cardText">{data.awayTeamShort}</h4>
           <p className="cardText">vs</p>
-          <h4 className="cardText">{data.homeTeam}</h4>
+          <h4 className="cardText">{data.homeTeamShort}</h4>
           <p className="cardText"> {data.arenaName}</p>
         </div>
       </div>

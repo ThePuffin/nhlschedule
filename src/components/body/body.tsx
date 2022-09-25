@@ -84,10 +84,10 @@ class Body extends React.Component {
       });
 
       this.setState({ schedule });
+      this.setState({ teams: activeTeams });
       for (const teamSelectedId of this.state.teamsSelectedIds) {
         await this.updateScheduleData({ teamSelectedId });
       }
-      this.setState({ teams: activeTeams });
     } catch (error) {
       console.error({ error });
     }
@@ -150,9 +150,12 @@ class Body extends React.Component {
           if (teams.home.team.id === teamSelectedId) {
             datas = {
               awayTeam: teams.away.team.name,
+              awayTeamShort: this.state.teams.find((team) => team.id === teams.away.team.id).franchise?.teamName,
               homeTeam: teams.home.team.name,
+              homeTeamShort: this.state.teams.find((team) => team.id === teamSelectedId).franchise?.teamName,
               arenaName: venue.name || '',
               gameDate: game.date,
+              timestampDate: new Date(game.date).getTime(),
             };
           }
         }
@@ -170,43 +173,59 @@ class Body extends React.Component {
     let dateChoice;
     if (this.state.showPicker) {
       dateChoice = (
-        <DateRangePicker
-          dateTimePickerData={{
-            startSeason,
-            endSeason,
-            handleChangeDateRange: this.handleChangeDateRange,
-            startDate: this.state.startDate,
-            endDate: this.state.endDate,
-            dataFormat: dataFormat,
-          }}
-        />
+        <div className="row" style={{ height: '10vh' }}>
+          <div className="input-field col 12" id="changeDate">
+            <DateRangePicker
+              dateTimePickerData={{
+                startSeason,
+                endSeason,
+                handleChangeDateRange: this.handleChangeDateRange,
+                startDate: this.state.startDate,
+                endDate: this.state.endDate,
+                dataFormat: dataFormat,
+              }}
+            />
+          </div>
+        </div>
       );
     } else {
       dateChoice = (
-        <button
-          className="dateButton"
-          type="button"
-          onClick={() => {
-            this.setState({ showPicker: true });
-          }}
-        >
-          <p>
-            <i className="material-icons">event</i>
-          </p>
-        </button>
+        <div className="row" style={{ height: '10vh' }}>
+          <div className="input-field col 4" id="buttonsDateAndPlace">
+            <button
+              className="dateButton"
+              type="button"
+              onClick={() => {
+                this.setState({ showPicker: true });
+              }}
+            >
+              <p>
+                <i className="material-icons">event</i>
+              </p>
+            </button>
+          </div>
+          {/* <div className="input-field col 4" id="changeDate">
+            <button className="homeButton" type="button">
+              <p>
+                <i className="material-icons">home</i>
+              </p>
+            </button>
+          </div>
+          <div className="input-field col 4" id="changeDate">
+            <button className="awayButton" type="button">
+              <p>
+                <i className="material-icons">flight_takeoff</i>
+              </p>
+            </button>
+          </div> */}
+        </div>
       );
     }
 
     if (!isEmpty(this.state.teams) && !isEmpty(this.state.schedule)) {
       return (
         <div>
-          <div className="container">
-            <div className="row" style={{ height: '10vh' }}>
-              <div className="input-field col 10" id="changeDate">
-                {dateChoice}
-              </div>
-            </div>
-          </div>
+          <div className="container">{dateChoice}</div>
 
           <div className="container" style={{ height: '78vh', overflow: 'auto' }}>
             <div className="row">
