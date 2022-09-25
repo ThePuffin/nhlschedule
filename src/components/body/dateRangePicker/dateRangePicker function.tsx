@@ -14,7 +14,6 @@ export default function DateRangePicker({
   thisBody,
 }) {
   const handleSelect = async (event) => {
-    console.log(event);
     setState([event.selection]);
 
     // await handleChangeDateRange(event.selection);

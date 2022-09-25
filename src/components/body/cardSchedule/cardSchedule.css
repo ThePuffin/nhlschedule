@@ -8,12 +8,14 @@
 .card {
   font-size: medium;
   justify-content: center;
-  height: 95%;
+  height: 92%;
   text-align: center;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
   width: 100%;
   display: flex;
   align-items: center;
+  background-color: white;
+    color: white;
 }
 
 
@@ -30,17 +32,27 @@ h3 {
 
 
 .cardGame{
-  background-color: gray;
-  color: gray;
-}
-.whiteCard {
   background-color: white;
   color: white;
 }
 
+.selected {
+  filter: contrast(4);
+}
+
+.unselected{
+  filter: brightness(200%)
+}
+
+
 .cardDate {
-  background-color: gray;
-  color: white;
+  background-color: darkgray;
+  color: whitesmoke;
+}
+
+.awayGame{
+  color: grey;
+  background-color: white;
 }
 
 

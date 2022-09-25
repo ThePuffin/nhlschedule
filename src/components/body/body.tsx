@@ -162,7 +162,7 @@ class Body extends React.Component {
               show:
                 (teams.home.team.id === teamSelectedId && this.state.showHome) ||
                 (teams.away.team.id === teamSelectedId && this.state.showAway),
-              selectedTeam: teams.home.team.id === teamSelectedId ? true : false,
+              selectedTeam: Number(teams.home.team.id) === Number(teamSelectedId),
             };
           }
         }
