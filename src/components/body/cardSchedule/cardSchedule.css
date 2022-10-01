@@ -46,7 +46,7 @@ h3 {
 
 
 .cardDate {
-  background-color: darkgray;
+   background-color: darkgray; 
   color: whitesmoke;
 }
 
@@ -55,14 +55,35 @@ h3 {
   background-color: white;
 }
 
+.arena{
+  display: flex;
+}
+
 
 p{
   font-size: small;
-  line-height: 0px;
 }
 
- @media only screen and ((max-width: 500px) or (max-height: 500px)) {
+.date {
+  display: none;
+}
+
+
+
+ @media only screen and ((max-width: 599px) or (max-height: 500px)) {
   .cardText{
-    font-size:x-small;
+    font-size:90%;  
+    line-height: 1vh;
   }
+
+  h4{
+    margin-top: 2vh;
+    margin-bottom: 2vh;
+    font-weight: bold;
+  }
+
+  .date {
+    display: inherit;
+  }
+
  }

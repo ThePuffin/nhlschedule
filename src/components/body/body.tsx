@@ -25,12 +25,14 @@ const endSeason =
 
 let startDateSelected = moment().isBefore(startSeason) ? startSeason : moment().format(dataFormat);
 let endDateSelected = moment(startDateSelected).add(1, 'month').format(dataFormat);
+const maxTeamToSelect = window.innerWidth > 500 ? 5 : 4;
 
 class Body extends React.Component {
   constructor(props) {
     super(props);
     this.handleChangeTeam = this.handleChangeTeam.bind(this);
     this.handleChangeDateRange = this.handleChangeDateRange.bind(this);
+    this.handleClick = this.handleClick.bind(this);
   }
 
   state = {
@@ -44,14 +46,16 @@ class Body extends React.Component {
     showHome: true,
     showAway: false,
   };
-
   async componentWillMount() {
     const teamsFromStorage = JSON.parse(localStorage.getItem('defaultTeamsSelectedIds'));
     const datesFromStorage = JSON.parse(localStorage.getItem('selectedDates'));
 
     if (teamsFromStorage) {
       defaultTeamsSelectedIds = teamsFromStorage;
-      this.setState({ teamsSelectedIds: teamsFromStorage });
+      if (defaultTeamsSelectedIds.length > maxTeamToSelect) {
+        defaultTeamsSelectedIds.pop();
+      }
+      this.setState({ teamsSelectedIds: defaultTeamsSelectedIds });
     }
     if (datesFromStorage) {
       startDateSelected = datesFromStorage.startDate;
@@ -61,6 +65,7 @@ class Body extends React.Component {
       this.setState({ startDate: startDateSelected, endDate: endDateSelected });
     }
   }
+
   async componentDidMount() {
     await this.getAllDates();
 
@@ -80,7 +85,8 @@ class Body extends React.Component {
 
       activeTeams.forEach((team, index) => {
         schedule[team.id] = [];
-        if (defaultTeamsSelectedIds.length < 5) {
+
+        if (defaultTeamsSelectedIds.length < maxTeamToSelect) {
           defaultTeamsSelectedIds.push(team.value);
         }
       });
@@ -262,6 +268,7 @@ class Body extends React.Component {
               </p>
             </button>
           </div>
+
           <div className="input-field col 4" id="changeDate">
             <button
               className={this.state.showAway ? 'activeButton selectButton' : 'inactiveButton selectButton'}
@@ -286,7 +293,7 @@ class Body extends React.Component {
 
           <div className="container" style={{ height: '78vh', overflow: 'auto' }}>
             <div className="row">
-              <div className="col s2">
+              <div className="col s2 cardDateColumn">
                 <div style={{ visibility: 'hidden', height: '8vh' }} id="hidden selector">
                   <Selector
                     handleChangeTeam={this.handleChangeTeam}
@@ -304,7 +311,7 @@ class Body extends React.Component {
               </div>
 
               {this.state.teamsSelectedIds.map((teamId, index) => (
-                <div className="col s2">
+                <div className="col s3 m2">
                   <div style={{ height: '8vh' }} id={teamId.toString()}>
                     <Selector
                       handleChangeTeam={this.handleChangeTeam}
