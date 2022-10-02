@@ -18,7 +18,7 @@ const CardSchedule = (props) => {
           <p className="cardText">vs</p>
           <h4 className="cardText">{data.homeTeamShort}</h4>
           <p className="cardText arena"> {data.arenaName}</p>
-          <p className="cardText date">{moment(data.gameDate).format('DD MM YY')}</p>
+          <p className="cardText date">{moment(data.gameDate).format('dd DD-MM-YY')}</p>
         </div>
       </div>
     );
