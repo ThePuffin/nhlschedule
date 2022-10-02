@@ -15,7 +15,7 @@
   display: flex;
   align-items: center;
   background-color: white;
-    color: white;
+  color: white;
 }
 
 
@@ -65,6 +65,10 @@ p{
 }
 
 .date {
+  display: none;
+}
+
+.whiteCard{
   display: none;
 }
 

@@ -104,7 +104,7 @@ class Body extends React.Component {
 
   handleClick(teamData) {
     const { teamSelectedId, timestampDate, show } = teamData;
-    if (timestampDate >= 0) {
+    if (timestampDate >= 0 && show) {
       let gameSelected = [...this.state.gameSelected];
       const existingGame = gameSelected.find((game) => teamSelectedId && game.timestampDate === timestampDate);
 
@@ -113,9 +113,7 @@ class Body extends React.Component {
           (game) => game.teamSelectedId !== teamSelectedId && game.timestampDate !== timestampDate
         );
       } else {
-        if (show) {
-          gameSelected.push(teamData);
-        }
+        gameSelected.push(teamData);
       }
 
       gameSelected.sort((a, b) => {
