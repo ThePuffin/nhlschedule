@@ -289,7 +289,7 @@ class Body extends React.Component {
       dateChoice = (
         <div className="container">
           <div className="row" style={{ height: '10vh' }}>
-            <div className="input-field col s4 m12" id="buttonsDateAndPlace">
+            <div className="input-field col s3 m6" id="buttonsDateAndPlace">
               <button
                 className="dateButton selectButton"
                 type="button"
@@ -302,7 +302,20 @@ class Body extends React.Component {
                 </p>
               </button>
             </div>
-            <div className="input-field col s4 m6" id="changeDate">
+            <div className="input-field col s3 m6" id="deleteSweepButton">
+              <button
+                className="sweepButton selectButton"
+                type="button"
+                onClick={async () => {
+                  this.setState({ gameSelected: {} });
+                }}
+              >
+                <p>
+                  <i className="material-icons">delete_sweep</i>
+                </p>
+              </button>
+            </div>
+            <div className="input-field col s3 m6" id="changeDate">
               <button
                 className={this.state.showHome ? 'activeButton selectButton' : 'inactiveButton selectButton'}
                 onClick={async () => {
@@ -316,7 +329,7 @@ class Body extends React.Component {
               </button>
             </div>
 
-            <div className="input-field col s4 m6" id="changeDate">
+            <div className="input-field col s3 m6" id="changeDate">
               <button
                 className={this.state.showAway ? 'activeButton selectButton' : 'inactiveButton selectButton'}
                 onClick={async () => {

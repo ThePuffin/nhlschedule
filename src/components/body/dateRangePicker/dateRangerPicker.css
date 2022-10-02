@@ -24,6 +24,14 @@
     background-color: rgba(255, 0, 0, 1);
 }
 
+.sweepButton {
+    background-color: black;
+}
+
+.sweepButton:hover {
+    background-color: rgb(41, 3, 3);
+}
+
 .inactiveButton {
     background-color: grey;
     color: darkgray;
