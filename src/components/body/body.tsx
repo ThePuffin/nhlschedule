@@ -159,6 +159,15 @@ class Body extends React.Component {
     this.setState({ startDate: startDateSelected, endDate: endDateSelected, showPicker: false });
 
     localStorage.setItem('selectedDates', JSON.stringify({ startDate: startDateSelected, endDate: endDateSelected }));
+
+    const gameSelected = [...this.state.gameSelected].filter(
+      (game) =>
+        moment(game.timestampDate / 1000).isAfter(moment(startDateSelected).unix()) &&
+        moment(game.timestampDate / 1000).isBefore(moment(endDateSelected).unix())
+    );
+
+    this.setState({ gameSelected });
+
     await this.getAllDates();
     for (const teamSelectedId of this.state.teamsSelectedIds) {
       await this.updateScheduleData({ teamSelectedId });
