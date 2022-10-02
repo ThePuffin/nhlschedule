@@ -107,7 +107,9 @@ class Body extends React.Component {
     const { teamSelectedId, timestampDate, show } = teamData;
     if (timestampDate >= 0 && show) {
       let gameSelected = [...this.state.gameSelected];
-      const existingGame = gameSelected.find((game) => teamSelectedId && game.timestampDate === timestampDate);
+      const existingGame = gameSelected.find(
+        (game) => game.teamSelectedId === teamSelectedId && game.timestampDate === timestampDate
+      );
 
       if (existingGame) {
         this.removeSelectedGame(teamData);
@@ -125,7 +127,7 @@ class Body extends React.Component {
   removeSelectedGame(teamData) {
     let gameSelected = [...this.state.gameSelected];
     gameSelected = gameSelected.filter(
-      (game) => game.teamSelectedId !== teamData.teamSelectedId && game.timestampDate !== teamData.timestampDate
+      (game) => game.teamSelectedId !== teamData.teamSelectedId || game.timestampDate !== teamData.timestampDate
     );
     this.setState({ gameSelected });
   }
