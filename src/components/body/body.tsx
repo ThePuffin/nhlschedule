@@ -45,6 +45,7 @@ class Body extends React.Component {
     showPicker: false,
     showHome: true,
     showAway: false,
+    gameSelected: [],
   };
   async componentWillMount() {
     const teamsFromStorage = JSON.parse(localStorage.getItem('defaultTeamsSelectedIds'));
@@ -101,6 +102,28 @@ class Body extends React.Component {
     }
   }
 
+  handleClick(teamData) {
+    const { teamSelectedId, timestampDate } = teamData;
+    if (teamSelectedId) {
+      let gameSelected = [...this.state.gameSelected];
+      const existingGame = gameSelected.find((game) => teamSelectedId && game.timestampDate === timestampDate);
+
+      if (existingGame) {
+        gameSelected = gameSelected.filter(
+          (game) => game.teamSelectedId !== teamSelectedId && game.timestampDate !== timestampDate
+        );
+      } else {
+        gameSelected.push(teamData);
+      }
+
+      gameSelected.sort((a, b) => {
+        return a.timestampDate - b.timestampDate;
+      });
+
+      this.setState({ gameSelected });
+    }
+  }
+
   async getAllDates() {
     let date = moment(startDateSelected);
     const allDates = [];
@@ -122,6 +145,11 @@ class Body extends React.Component {
       localStorage.setItem('defaultTeamsSelectedIds', JSON.stringify(teamsSelectedIds));
 
       await this.updateScheduleData({ teamSelectedId: newTeamId });
+
+      const gameSelected = [...this.state.gameSelected].filter((game) =>
+        this.state.teamsSelectedIds.includes(game.teamSelectedId)
+      );
+      this.setState({ gameSelected });
     }
   }
 
@@ -222,6 +250,7 @@ class Body extends React.Component {
 
   render() {
     let dateChoice;
+    let selectedGame;
     if (this.state.showPicker) {
       dateChoice = (
         <div className="row" style={{ height: '10vh' }}>
@@ -284,12 +313,25 @@ class Body extends React.Component {
           </div>
         </div>
       );
+
+      if (this.state.gameSelected.length) {
+        selectedGame = (
+          <div className="row">
+            {this.state.gameSelected.map((game) => (
+              <div className="col s3 m2" style={{ height: '25vh' }}>
+                <CardSchedule teamDate={game} />
+              </div>
+            ))}
+          </div>
+        );
+      }
     }
 
     if (!isEmpty(this.state.teams) && !isEmpty(this.state.schedule)) {
       return (
         <div>
           <div className="container">{dateChoice}</div>
+          <div className="container">{selectedGame}</div>
 
           <div className="container" style={{ height: '78vh', overflow: 'auto' }}>
             <div className="row">
@@ -322,7 +364,7 @@ class Body extends React.Component {
                   </div>
 
                   {this.state.schedule[teamId].map((teamDate) => (
-                    <div style={{ height: '25vh' }}>
+                    <div onClick={() => this.handleClick(teamDate)} style={{ height: '25vh' }}>
                       <CardSchedule teamDate={teamDate} />
                     </div>
                   ))}
