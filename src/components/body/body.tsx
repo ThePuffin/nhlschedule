@@ -272,46 +272,48 @@ class Body extends React.Component {
       );
     } else {
       dateChoice = (
-        <div className="row" style={{ height: '10vh' }}>
-          <div className="input-field col 4" id="buttonsDateAndPlace">
-            <button
-              className="dateButton selectButton"
-              type="button"
-              onClick={async () => {
-                await this.setState({ showPicker: true });
-              }}
-            >
-              <p>
-                <i className="material-icons">event</i>
-              </p>
-            </button>
-          </div>
-          <div className="input-field col 4" id="changeDate">
-            <button
-              className={this.state.showHome ? 'activeButton selectButton' : 'inactiveButton selectButton'}
-              onClick={async () => {
-                await this.switchButton('home');
-              }}
-              type="button"
-            >
-              <p>
-                <i className="material-icons">home</i>
-              </p>
-            </button>
-          </div>
+        <div className="container">
+          <div className="row" style={{ height: '10vh' }}>
+            <div className="input-field col s4 m12" id="buttonsDateAndPlace">
+              <button
+                className="dateButton selectButton"
+                type="button"
+                onClick={async () => {
+                  await this.setState({ showPicker: true });
+                }}
+              >
+                <p>
+                  <i className="material-icons">event</i>
+                </p>
+              </button>
+            </div>
+            <div className="input-field col s4 m6" id="changeDate">
+              <button
+                className={this.state.showHome ? 'activeButton selectButton' : 'inactiveButton selectButton'}
+                onClick={async () => {
+                  await this.switchButton('home');
+                }}
+                type="button"
+              >
+                <p>
+                  <i className="material-icons">home</i>
+                </p>
+              </button>
+            </div>
 
-          <div className="input-field col 4" id="changeDate">
-            <button
-              className={this.state.showAway ? 'activeButton selectButton' : 'inactiveButton selectButton'}
-              onClick={async () => {
-                await this.switchButton('away');
-              }}
-              type="button"
-            >
-              <p>
-                <i className="material-icons">flight_takeoff</i>
-              </p>
-            </button>
+            <div className="input-field col s4 m6" id="changeDate">
+              <button
+                className={this.state.showAway ? 'activeButton selectButton' : 'inactiveButton selectButton'}
+                onClick={async () => {
+                  await this.switchButton('away');
+                }}
+                type="button"
+              >
+                <p>
+                  <i className="material-icons">flight_takeoff</i>
+                </p>
+              </button>
+            </div>
           </div>
         </div>
       );
@@ -334,8 +336,8 @@ class Body extends React.Component {
         <div>
           <div className="container">
             <div className="row">
-              <div className="container">{dateChoice}</div>
-              <div className="container">{selectedGame}</div>
+              <div className="container col s12 m2">{dateChoice}</div>
+              <div className="container s3 m2">{selectedGame}</div>
             </div>
           </div>
 
