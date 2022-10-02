@@ -103,8 +103,8 @@ class Body extends React.Component {
   }
 
   handleClick(teamData) {
-    const { teamSelectedId, timestampDate } = teamData;
-    if (teamSelectedId) {
+    const { teamSelectedId, timestampDate, show } = teamData;
+    if (timestampDate >= 0) {
       let gameSelected = [...this.state.gameSelected];
       const existingGame = gameSelected.find((game) => teamSelectedId && game.timestampDate === timestampDate);
 
@@ -113,7 +113,9 @@ class Body extends React.Component {
           (game) => game.teamSelectedId !== teamSelectedId && game.timestampDate !== timestampDate
         );
       } else {
-        gameSelected.push(teamData);
+        if (show) {
+          gameSelected.push(teamData);
+        }
       }
 
       gameSelected.sort((a, b) => {
@@ -246,6 +248,8 @@ class Body extends React.Component {
       }
     }
     await this.setState({ schedule: newSchedule });
+    const gameSelected = [...this.state.gameSelected].filter((game) => game.show);
+    this.setState({ gameSelected });
   }
 
   render() {
@@ -330,8 +334,12 @@ class Body extends React.Component {
     if (!isEmpty(this.state.teams) && !isEmpty(this.state.schedule)) {
       return (
         <div>
-          <div className="container">{dateChoice}</div>
-          <div className="container">{selectedGame}</div>
+          <div className="container">
+            <div className="row">
+              <div className="container">{dateChoice}</div>
+              <div className="container">{selectedGame}</div>
+            </div>
+          </div>
 
           <div className="container" style={{ height: '78vh', overflow: 'auto' }}>
             <div className="row">
