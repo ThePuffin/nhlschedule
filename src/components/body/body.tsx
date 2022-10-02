@@ -32,7 +32,8 @@ class Body extends React.Component {
     super(props);
     this.handleChangeTeam = this.handleChangeTeam.bind(this);
     this.handleChangeDateRange = this.handleChangeDateRange.bind(this);
-    this.handleClick = this.handleClick.bind(this);
+    this.hadOrRemoveGame = this.hadOrRemoveGame.bind(this);
+    this.removeSelectedGame = this.removeSelectedGame.bind(this);
   }
 
   state = {
@@ -102,26 +103,31 @@ class Body extends React.Component {
     }
   }
 
-  handleClick(teamData) {
+  hadOrRemoveGame(teamData) {
     const { teamSelectedId, timestampDate, show } = teamData;
     if (timestampDate >= 0 && show) {
       let gameSelected = [...this.state.gameSelected];
       const existingGame = gameSelected.find((game) => teamSelectedId && game.timestampDate === timestampDate);
 
       if (existingGame) {
-        gameSelected = gameSelected.filter(
-          (game) => game.teamSelectedId !== teamSelectedId && game.timestampDate !== timestampDate
-        );
+        this.removeSelectedGame(teamData);
       } else {
         gameSelected.push(teamData);
+
+        gameSelected.sort((a, b) => {
+          return a.timestampDate - b.timestampDate;
+        });
+        this.setState({ gameSelected });
       }
-
-      gameSelected.sort((a, b) => {
-        return a.timestampDate - b.timestampDate;
-      });
-
-      this.setState({ gameSelected });
     }
+  }
+
+  removeSelectedGame(teamData) {
+    let gameSelected = [...this.state.gameSelected];
+    gameSelected = gameSelected.filter(
+      (game) => game.teamSelectedId !== teamData.teamSelectedId && game.timestampDate !== teamData.timestampDate
+    );
+    this.setState({ gameSelected });
   }
 
   async getAllDates() {
@@ -331,7 +337,7 @@ class Body extends React.Component {
         selectedGame = (
           <div className="row">
             {this.state.gameSelected.map((game) => (
-              <div className="col s3 m2" style={{ height: '25vh' }}>
+              <div onClick={() => this.removeSelectedGame(game)} className="col s3 m2" style={{ height: '25vh' }}>
                 <CardSchedule teamDate={game} />
               </div>
             ))}
@@ -381,7 +387,7 @@ class Body extends React.Component {
                   </div>
 
                   {this.state.schedule[teamId].map((teamDate) => (
-                    <div onClick={() => this.handleClick(teamDate)} style={{ height: '25vh' }}>
+                    <div onClick={() => this.hadOrRemoveGame(teamDate)} style={{ height: '25vh' }}>
                       <CardSchedule teamDate={teamDate} />
                     </div>
                   ))}
