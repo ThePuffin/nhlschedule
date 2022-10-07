@@ -310,10 +310,12 @@ class Body extends React.Component {
             </div>
             <div className="input-field col s3 m6" id="deleteSweepButton">
               <button
-                className="sweepButton selectButton"
+                className={this.state.gameSelected.length > 0 ? 'sweepButton selectButton' : 'selectButton unclickable'}
                 type="button"
                 onClick={async () => {
-                  this.setState({ gameSelected: {} });
+                  if (this.state.gameSelected.length) {
+                    this.setState({ gameSelected: [] });
+                  }
                 }}
               >
                 <p>

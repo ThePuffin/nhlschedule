@@ -3,7 +3,7 @@
 .ext-box{
   display: table-cell;
   vertical-align: middle;
-}
+  }
 
 .card {
   font-size: medium;
@@ -16,7 +16,9 @@
   align-items: center;
   background-color: white;
   color: white;
+  cursor: pointer;
 }
+
 
 
 @media only screen and (min-width: 500px) {
@@ -48,6 +50,7 @@ h3 {
 .cardDate {
    background-color: darkgray; 
   color: whitesmoke;
+  cursor: not-allowed !important;
 }
 
 .awayGame{
@@ -66,10 +69,12 @@ p{
 
 .date {
   display: none;
+  cursor: none;
 }
 
 .whiteCard{
   display: none;
+  cursor: not-allowed;
 }
 
 

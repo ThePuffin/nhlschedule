@@ -27,6 +27,12 @@
 .App-link {
   color: #61dafb;
 }
+
+.unclickable {
+  pointer-events: none;
+  cursor: not-allowed;
+}
+
  @media only screen and ((max-width: 599px) ) {
   .cardDateColumn{
         display: none;

@@ -10,7 +10,11 @@ const CardSchedule = (props) => {
     return (
       <div
         className={
-          data.arenaName && data.show ? (data.selectedTeam ? `card t${data.homeTeamId}` : `card awayGame`) : 'card '
+          data.arenaName && data.show
+            ? data.selectedTeam
+              ? `card t${data.homeTeamId}`
+              : `card awayGame`
+            : 'card unclickable'
         }
       >
         <div className={data.show ? 'ext-box' : 'whiteCard'}>
