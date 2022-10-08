@@ -118,9 +118,6 @@ class Body extends React.Component {
       } else {
         gameSelected = gameSelected.filter((game) => game.gameDate !== teamData.gameDate);
         gameSelected.push(teamData);
-        // if (gameSelected.length > maxTeamToSelect) {
-        //   gameSelected.shift();
-        // }
 
         gameSelected.sort((a, b) => {
           return a.timestampDate - b.timestampDate;
