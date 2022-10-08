@@ -379,7 +379,7 @@ class Body extends React.Component {
             </div>
           </div>
 
-          <div className="container" style={{ height: '78vh', overflow: 'auto' }}>
+          <div className="container gamesList">
             <div className="row">
               <div className="col s2 cardDateColumn">
                 <div style={{ visibility: 'hidden', height: '8vh' }} id="hidden selector">
