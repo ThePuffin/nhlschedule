@@ -377,7 +377,7 @@ class Body extends React.Component {
           <div className="container">
             <div className="row row-selection">
               <div className=" col s12 m2">{dateChoice}</div>
-              <div className="col m10">{selectedGame}</div>
+              <div className="col s12 m10">{selectedGame}</div>
             </div>
           </div>
 
