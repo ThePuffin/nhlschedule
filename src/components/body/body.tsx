@@ -275,8 +275,8 @@ class Body extends React.Component {
     let selectedGame;
     if (this.state.showPicker) {
       dateChoice = (
-        <div className="row" style={{ height: '10vh' }}>
-          <div className="input-field col 12" id="changeDate">
+        <div className="row">
+          <div className="input-field col s4 offset-s4" id="changeDate">
             <DateRangePicker
               dateTimePickerData={{
                 startSeason,
@@ -292,70 +292,68 @@ class Body extends React.Component {
       );
     } else {
       dateChoice = (
-        <div className="container">
-          <div className="row" style={{ height: '10vh' }}>
-            <div className="input-field col s3 m6" id="buttonsDateAndPlace">
-              <button
-                className="dateButton selectButton"
-                type="button"
-                onClick={async () => {
-                  await this.setState({ showPicker: true });
-                }}
-              >
-                <p>
-                  <i className="material-icons">event</i>
-                </p>
-              </button>
-            </div>
-            <div className="input-field col s3 m6" id="deleteSweepButton">
-              <button
-                className={this.state.gameSelected.length > 0 ? 'sweepButton selectButton' : 'selectButton unclickable'}
-                type="button"
-                onClick={async () => {
-                  if (this.state.gameSelected.length) {
-                    this.setState({ gameSelected: [] });
-                  }
-                }}
-              >
-                <p>
-                  <i className="material-icons">delete_sweep</i>
-                </p>
-              </button>
-            </div>
-            <div className="input-field col s3 m6" id="changeDate">
-              <button
-                className={this.state.showHome ? 'activeButton selectButton' : 'inactiveButton selectButton'}
-                onClick={async () => {
-                  await this.switchButton('home');
-                }}
-                type="button"
-              >
-                <p>
-                  <i className="material-icons">home</i>
-                </p>
-              </button>
-            </div>
+        <div className="col s12 m2">
+          <div className="input-field col s3 m6" id="buttonsDateAndPlace">
+            <button
+              className="dateButton selectButton"
+              type="button"
+              onClick={async () => {
+                await this.setState({ showPicker: true });
+              }}
+            >
+              <p>
+                <i className="material-icons">event</i>
+              </p>
+            </button>
+          </div>
+          <div className="input-field col s3 m6" id="deleteSweepButton">
+            <button
+              className={this.state.gameSelected.length > 0 ? 'sweepButton selectButton' : 'selectButton unclickable'}
+              type="button"
+              onClick={async () => {
+                if (this.state.gameSelected.length) {
+                  this.setState({ gameSelected: [] });
+                }
+              }}
+            >
+              <p>
+                <i className="material-icons">delete_sweep</i>
+              </p>
+            </button>
+          </div>
+          <div className="input-field col s3 m6" id="changeDate">
+            <button
+              className={this.state.showHome ? 'activeButton selectButton' : 'inactiveButton selectButton'}
+              onClick={async () => {
+                await this.switchButton('home');
+              }}
+              type="button"
+            >
+              <p>
+                <i className="material-icons">home</i>
+              </p>
+            </button>
+          </div>
 
-            <div className="input-field col s3 m6" id="changeDate">
-              <button
-                className={this.state.showAway ? 'activeButton selectButton' : 'inactiveButton selectButton'}
-                onClick={async () => {
-                  await this.switchButton('away');
-                }}
-                type="button"
-              >
-                <p>
-                  <i className="material-icons">flight_takeoff</i>
-                </p>
-              </button>
-            </div>
+          <div className="input-field col s3 m6" id="changeDate">
+            <button
+              className={this.state.showAway ? 'activeButton selectButton' : 'inactiveButton selectButton'}
+              onClick={async () => {
+                await this.switchButton('away');
+              }}
+              type="button"
+            >
+              <p>
+                <i className="material-icons">flight_takeoff</i>
+              </p>
+            </button>
           </div>
         </div>
       );
 
       if (this.state.gameSelected.length) {
         selectedGame = (
-          <div className="col s12">
+          <div className="col s12 row-selection">
             {this.state.gameSelected.map((game) => (
               <div
                 onClick={() => this.removeSelectedGame(game)}
@@ -375,8 +373,8 @@ class Body extends React.Component {
       return (
         <div>
           <div className="container">
-            <div className="row row-selection">
-              <div className=" col s12 m2">{dateChoice}</div>
+            <div className="row">
+              <div>{dateChoice}</div>
               <div className="col s12 m10">{selectedGame}</div>
             </div>
           </div>
