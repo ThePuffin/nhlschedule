@@ -44,7 +44,7 @@
 .row-selection{
     margin-bottom: 5vh;
     height: 25vh;
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 
 
