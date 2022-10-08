@@ -9,6 +9,8 @@ import DateRangePicker from './dateRangePicker/dateRangePicker';
 import Loader from './loader/loader';
 import Selector from './selector/selector';
 
+import './body.css';
+
 let defaultTeamsSelectedIds = [];
 const userFormat = 'DD MM YYYY';
 const dataFormat = 'YYYY-MM-DD';
@@ -409,7 +411,7 @@ class Body extends React.Component {
 
                   {this.state.schedule[teamId].map((teamDate) => (
                     <div onClick={() => this.hadOrRemoveGame(teamDate)} style={{ height: '25vh' }}>
-                      <CardSchedule teamDate={teamDate} />
+                      <CardSchedule teamDate={teamDate} hideDate="true" />
                     </div>
                   ))}
                 </div>

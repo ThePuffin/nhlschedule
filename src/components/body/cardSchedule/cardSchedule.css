@@ -10,7 +10,7 @@
   justify-content: center;
   height: 92%;
   text-align: center;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  box-shadow: 0.1vh 0.1vh 0.1vh 0.1vh rgba(0, 0, 0, 0.2);
   width: 100%;
   display: flex;
   align-items: center;
@@ -58,18 +58,16 @@ h3 {
   background-color: white;
 }
 
-.arena{
-  display: flex;
-}
+
 
 
 p{
   font-size: small;
 }
 
-.date {
+.hideDate {
   display: none;
-  cursor: none;
+
 }
 
 .whiteCard{
@@ -91,7 +89,7 @@ p{
     font-weight: bold;
   }
 
-  .date {
+  .hideDate {
     display: inherit;
   }
 
