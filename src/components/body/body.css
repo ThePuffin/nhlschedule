@@ -41,6 +41,11 @@
     color: white;
 }
 
+.row-selection{
+    margin-bottom: 5vh;
+    height: 25vh;
+    overflow-y: scroll;
+}
 
 
 @media only screen and ((max-width: 599px)) {

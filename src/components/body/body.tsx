@@ -1,3 +1,5 @@
+import './body.css';
+
 import axios from 'axios';
 import isEmpty from 'lodash/isEmpty';
 import M from 'materialize-css';
@@ -8,8 +10,6 @@ import CardSchedule from './cardSchedule/cardSchedule';
 import DateRangePicker from './dateRangePicker/dateRangePicker';
 import Loader from './loader/loader';
 import Selector from './selector/selector';
-
-import './body.css';
 
 let defaultTeamsSelectedIds = [];
 const userFormat = 'DD MM YYYY';
@@ -118,9 +118,9 @@ class Body extends React.Component {
       } else {
         gameSelected = gameSelected.filter((game) => game.gameDate !== teamData.gameDate);
         gameSelected.push(teamData);
-        if (gameSelected.length > maxTeamToSelect) {
-          gameSelected.shift();
-        }
+        // if (gameSelected.length > maxTeamToSelect) {
+        //   gameSelected.shift();
+        // }
 
         gameSelected.sort((a, b) => {
           return a.timestampDate - b.timestampDate;
@@ -358,9 +358,14 @@ class Body extends React.Component {
 
       if (this.state.gameSelected.length) {
         selectedGame = (
-          <div className="row">
+          <div className="col s12">
             {this.state.gameSelected.map((game) => (
-              <div onClick={() => this.removeSelectedGame(game)} className="col s3 m2" style={{ height: '25vh' }}>
+              <div
+                onClick={() => this.removeSelectedGame(game)}
+                className="col s3 m2
+              "
+                style={{ height: '25vh' }}
+              >
                 <CardSchedule teamDate={game} />
               </div>
             ))}
@@ -373,9 +378,9 @@ class Body extends React.Component {
       return (
         <div>
           <div className="container">
-            <div className="row">
-              <div className="container col s12 m2">{dateChoice}</div>
-              <div className="container s3 m2">{selectedGame}</div>
+            <div className="row row-selection">
+              <div className=" col s12 m2">{dateChoice}</div>
+              <div className="col m10">{selectedGame}</div>
             </div>
           </div>
 
