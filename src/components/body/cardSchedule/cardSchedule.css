@@ -25,6 +25,7 @@
 h4{
   font-size: large;
   font-weight:bold;
+  margin: 1.5vh 0;
 }
 
 h3 {
@@ -63,8 +64,14 @@ p{
 }
 
 .arena{
-  line-height: 50%;
+ 
   font-size: x-small;
+}
+
+.vs{
+  font-size: x-small;
+  margin-top: 0;
+  margin-bottom: 0;
 }
 
 .hideDate {
