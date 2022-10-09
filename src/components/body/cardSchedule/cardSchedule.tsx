@@ -6,6 +6,7 @@ import moment from 'moment';
 const CardSchedule = (props) => {
   const data = props.teamDate ? props.teamDate : props.gameDate;
   let hideDate = props.hideDate;
+  let dateSelected = props.dateSelected;
 
   if (props.teamDate) {
     return (
@@ -18,12 +19,16 @@ const CardSchedule = (props) => {
             : 'card unclickable'
         }
       >
-        <div className={data.show ? 'ext-box' : 'whiteCard'}>
-          <h4 className="cardText">{data.awayTeamShort}</h4>
-          <p className="cardText">vs</p>
-          <h4 className="cardText">{data.homeTeamShort}</h4>
-          <p className="cardText arena"> {data.arenaName}</p>
-          <p className={hideDate ? 'cardText hideDate' : 'cardText'}>{moment(data.gameDate).format('ddd DD-MM-YY')}</p>
+        <div className={dateSelected >= 0 ? 'selected' : ''}>
+          <div className={data.show ? 'ext-box' : 'whiteCard'}>
+            <p className={hideDate ? 'cardText hideDate' : 'cardText'}>
+              {moment(data.gameDate).format('ddd DD-MM-YY')}
+            </p>
+            <h4 className="cardText">{data.awayTeamShort}</h4>
+            <p className="cardText">vs</p>
+            <h4 className="cardText">{data.homeTeamShort}</h4>
+            <p className="cardText arena"> {data.arenaName}</p>
+          </div>
         </div>
       </div>
     );

@@ -39,12 +39,12 @@ h3 {
 }
 
 .selected {
-  filter: contrast(4);
+  opacity: 0.5;
+  font-style: oblique; 
+  font-family: 'Times New Roman';
 }
 
-.unselected{
-  filter: brightness(200%)
-}
+
 
 
 .cardDate {
@@ -58,11 +58,13 @@ h3 {
   background-color: white;
 }
 
-
-
-
 p{
   font-size: small;
+}
+
+.arena{
+  line-height: 50%;
+  font-size: x-small;
 }
 
 .hideDate {

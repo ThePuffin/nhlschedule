@@ -276,7 +276,7 @@ class Body extends React.Component {
     if (this.state.showPicker) {
       dateChoice = (
         <div className="row">
-          <div className="input-field col s4 offset-s4" id="changeDate">
+          <div className="input-field col s12 m2 offset-m4" id="changeDate">
             <DateRangePicker
               dateTimePickerData={{
                 startSeason,
@@ -411,7 +411,13 @@ class Body extends React.Component {
 
                   {this.state.schedule[teamId].map((teamDate) => (
                     <div onClick={() => this.hadOrRemoveGame(teamDate)} style={{ height: '25vh' }}>
-                      <CardSchedule teamDate={teamDate} hideDate="true" />
+                      <CardSchedule
+                        teamDate={teamDate}
+                        hideDate="true"
+                        dateSelected={this.state.gameSelected.findIndex(
+                          (e) => e.teamSelectedId === teamDate.teamSelectedId && e.gameDate === teamDate.gameDate
+                        )}
+                      />
                     </div>
                   ))}
                 </div>
