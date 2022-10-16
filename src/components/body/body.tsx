@@ -48,11 +48,12 @@ class Body extends React.Component {
     showPicker: false,
     showHome: true,
     showAway: false,
-    gameSelected: [],
+    gamesSelected: [],
   };
   async componentWillMount() {
     const teamsFromStorage = JSON.parse(localStorage.getItem('defaultTeamsSelectedIds'));
     const datesFromStorage = JSON.parse(localStorage.getItem('selectedDates'));
+    const gamesSelectedFromStorage = JSON.parse(localStorage.getItem('gamesSelectedDates'));
 
     if (teamsFromStorage) {
       defaultTeamsSelectedIds = teamsFromStorage;
@@ -67,6 +68,10 @@ class Body extends React.Component {
       endDateSelected = datesFromStorage.endDate;
 
       this.setState({ startDate: startDateSelected, endDate: endDateSelected });
+    }
+
+    if (gamesSelectedFromStorage) {
+      this.setState({ gamesSelected: gamesSelectedFromStorage });
     }
   }
 
@@ -108,31 +113,33 @@ class Body extends React.Component {
   hadOrRemoveGame(teamData) {
     const { teamSelectedId, timestampDate, show } = teamData;
     if (timestampDate >= 0 && show) {
-      let gameSelected = [...this.state.gameSelected];
-      const existingGame = gameSelected.find(
+      let gamesSelected = [...this.state.gamesSelected];
+      const existingGame = gamesSelected.find(
         (game) => game.teamSelectedId === teamSelectedId && game.timestampDate === timestampDate
       );
 
       if (existingGame) {
         this.removeSelectedGame(teamData);
       } else {
-        gameSelected = gameSelected.filter((game) => game.gameDate !== teamData.gameDate);
-        gameSelected.push(teamData);
+        gamesSelected = gamesSelected.filter((game) => game.gameDate !== teamData.gameDate);
+        gamesSelected.push(teamData);
 
-        gameSelected.sort((a, b) => {
+        gamesSelected.sort((a, b) => {
           return a.timestampDate - b.timestampDate;
         });
-        this.setState({ gameSelected });
+
+        this.setState({ gamesSelected });
       }
+      localStorage.setItem('gamesSelectedDates', JSON.stringify(gamesSelected));
     }
   }
 
   removeSelectedGame(teamData) {
-    let gameSelected = [...this.state.gameSelected];
-    gameSelected = gameSelected.filter(
+    let gamesSelected = [...this.state.gamesSelected];
+    gamesSelected = gamesSelected.filter(
       (game) => game.teamSelectedId !== teamData.teamSelectedId || game.timestampDate !== teamData.timestampDate
     );
-    this.setState({ gameSelected });
+    this.setState({ gamesSelected });
   }
 
   async getAllDates() {
@@ -157,10 +164,10 @@ class Body extends React.Component {
 
       await this.updateScheduleData({ teamSelectedId: newTeamId });
 
-      const gameSelected = [...this.state.gameSelected].filter((game) =>
+      const gamesSelected = [...this.state.gamesSelected].filter((game) =>
         this.state.teamsSelectedIds.includes(game.teamSelectedId)
       );
-      this.setState({ gameSelected });
+      this.setState({ gamesSelected });
     }
   }
 
@@ -171,13 +178,13 @@ class Body extends React.Component {
 
     localStorage.setItem('selectedDates', JSON.stringify({ startDate: startDateSelected, endDate: endDateSelected }));
 
-    const gameSelected = [...this.state.gameSelected].filter(
+    const gamesSelected = [...this.state.gamesSelected].filter(
       (game) =>
         moment(game.timestampDate / 1000).isAfter(moment(startDateSelected).unix()) &&
         moment(game.timestampDate / 1000).isBefore(moment(endDateSelected).unix())
     );
 
-    this.setState({ gameSelected });
+    this.setState({ gamesSelected });
 
     await this.getAllDates();
     for (const teamSelectedId of this.state.teamsSelectedIds) {
@@ -266,8 +273,8 @@ class Body extends React.Component {
       }
     }
     await this.setState({ schedule: newSchedule });
-    const gameSelected = [...this.state.gameSelected].filter((game) => game.show);
-    this.setState({ gameSelected });
+    const gamesSelected = [...this.state.gamesSelected].filter((game) => game.show);
+    this.setState({ gamesSelected });
   }
 
   render() {
@@ -308,11 +315,11 @@ class Body extends React.Component {
           </div>
           <div className="input-field col s3 m6" id="deleteSweepButton">
             <button
-              className={this.state.gameSelected.length > 0 ? 'sweepButton selectButton' : 'selectButton unclickable'}
+              className={this.state.gamesSelected.length > 0 ? 'sweepButton selectButton' : 'selectButton unclickable'}
               type="button"
               onClick={async () => {
-                if (this.state.gameSelected.length) {
-                  this.setState({ gameSelected: [] });
+                if (this.state.gamesSelected.length) {
+                  this.setState({ gamesSelected: [] });
                 }
               }}
             >
@@ -351,10 +358,10 @@ class Body extends React.Component {
         </div>
       );
 
-      if (this.state.gameSelected.length) {
+      if (this.state.gamesSelected.length) {
         selectedGame = (
           <div className="col s12 row-selection">
-            {this.state.gameSelected.map((game) => (
+            {this.state.gamesSelected.map((game) => (
               <div
                 onClick={() => this.removeSelectedGame(game)}
                 className="col s3 m2
@@ -414,7 +421,7 @@ class Body extends React.Component {
                       <CardSchedule
                         teamDate={teamDate}
                         hideDate="true"
-                        dateSelected={this.state.gameSelected.findIndex(
+                        dateSelected={this.state.gamesSelected.findIndex(
                           (e) => e.teamSelectedId === teamDate.teamSelectedId && e.gameDate === teamDate.gameDate
                         )}
                       />
