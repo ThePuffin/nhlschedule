@@ -21,9 +21,11 @@ const CardSchedule = (props) => {
       >
         <div className={dateSelected >= 0 ? 'selected' : ''}>
           <div className={data.show ? 'ext-box' : 'whiteCard'}>
-            <p className={hideDate ? 'cardText hideDate' : 'cardText'}>
-              {moment(data.gameDate).format('ddd DD-MM-YY')}
-            </p>
+            <div>
+              <p className={hideDate ? 'cardText hideDate' : 'cardText'}>
+                {moment(data.gameDate).format('ddd DD-MM-YY')}
+              </p>
+            </div>
             <h4 className="cardText">{data.awayTeamShort}</h4>
             <p className="cardText vs">vs</p>
             <h4 className="cardText">{data.homeTeamShort}</h4>
