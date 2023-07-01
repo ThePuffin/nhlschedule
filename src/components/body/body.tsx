@@ -17,13 +17,13 @@ const dataFormat = 'YYYY-MM-DD';
 const year = new Date().getFullYear();
 const now = moment();
 const startSeason =
-  now.isBefore(moment(`${year} 08 01`)) && now.isSameOrAfter(moment(`${year} 01 01`))
+  now.isBefore(moment(`${year} 06 30`)) && now.isSameOrAfter(moment(`${year} 01 01`))
     ? moment(`${year - 1} 10 01 `).format(dataFormat)
     : moment(`${year} 10 01 `).format(dataFormat);
 const endSeason =
-  now.isAfter(moment(`${year} 08 01`)) && now.isBefore(moment(`${year + 1} 01 01`))
-    ? moment(`${year + 1} 07 01 `).format(dataFormat)
-    : moment(`${year} 07 01 `).format(dataFormat);
+  now.isAfter(moment(`${year} 06 30`)) && now.isBefore(moment(`${year + 1} 01 01`))
+    ? moment(`${year + 1} 06 30 `).format(dataFormat)
+    : moment(`${year} 06 30 `).format(dataFormat);
 
 let startDateSelected = moment().isBefore(startSeason) ? startSeason : moment().format(dataFormat);
 let endDateSelected = moment(startDateSelected).add(1, 'month').format(dataFormat);
