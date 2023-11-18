@@ -83,16 +83,6 @@ class Body extends React.Component {
 
     M.AutoInit();
     try {
-      // const today = moment().format('YYYY-MM-DD');
-      // const resTeams = await axios.get(`https://statsapi.web.nhl.com/api/v1/teams`);
-
-      // const activeTeams = resTeams.data.teams
-      //   .filter((team) => team.active)
-      //   .map((team) => {
-      //     team.value = team.id;
-      //     team.label = team.name;
-      //     return team;
-      //   });
       let resTeams = allTeams?.standings || [];
 
       const activeTeams = resTeams.map((team) => {
@@ -111,12 +101,12 @@ class Body extends React.Component {
           defaultTeamsSelectedIds.push(team.value);
         }
       });
-      this.setState({ schedule });
+      await this.setState({ schedule });
 
-      this.setState({ teams: activeTeams });
-
+      await this.setState({ teams: activeTeams });
+      await this.getAllDates();
       for (const teamSelectedId of this.state.teamsSelectedIds) {
-        await this.updateScheduleData({ teamSelectedId });
+        await this.updateScheduleData({ teamSelectedId, schedule });
       }
     } catch (error) {
       console.error({ error });
@@ -204,7 +194,7 @@ class Body extends React.Component {
     }
   }
 
-  async updateScheduleData({ teamSelectedId }) {
+  async updateScheduleData({ teamSelectedId, schedule = {} }) {
     try {
       let scheduleDates;
       try {
@@ -221,7 +211,8 @@ class Body extends React.Component {
           ) || [];
       }
 
-      const scheduleState = { ...this.state.schedule };
+      const scheduleState = isEmpty(this.state.schedule) ? schedule : { ...this.state.schedule };
+      console.log(scheduleState);
 
       scheduleState[teamSelectedId] = [];
 
