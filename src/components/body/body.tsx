@@ -1,10 +1,13 @@
 import './body.css';
 
-import axios from 'axios';
+// import axios from 'axios';
 import isEmpty from 'lodash/isEmpty';
 import M from 'materialize-css';
 import moment from 'moment';
 import React from 'react';
+
+import allTeams from '../../temporaryData/allTeams.json';
+import currentSeason from '../../temporaryData/currentSeason.json';
 
 import CardSchedule from './cardSchedule/cardSchedule';
 import DateRangePicker from './dateRangePicker/dateRangePicker';
@@ -80,28 +83,38 @@ class Body extends React.Component {
 
     M.AutoInit();
     try {
-      const resTeams = await axios.get(`https://statsapi.web.nhl.com/api/v1/teams`);
+      // const today = moment().format('YYYY-MM-DD');
+      // const resTeams = await axios.get(`https://statsapi.web.nhl.com/api/v1/teams`);
 
-      const activeTeams = resTeams.data.teams
-        .filter((team) => team.active)
-        .map((team) => {
-          team.value = team.id;
-          team.label = team.name;
-          return team;
-        });
+      // const activeTeams = resTeams.data.teams
+      //   .filter((team) => team.active)
+      //   .map((team) => {
+      //     team.value = team.id;
+      //     team.label = team.name;
+      //     return team;
+      //   });
+      let resTeams = allTeams?.standings || [];
+
+      const activeTeams = resTeams.map((team) => {
+        team.value = team.teamAbbrev?.default;
+        team.id = team.teamAbbrev?.default;
+        team.label = team.teamName?.default;
+        return team;
+      });
 
       const schedule = { ...this.state.schedule };
 
       activeTeams.forEach((team, index) => {
-        schedule[team.id] = [];
+        schedule[team.value] = [];
 
         if (defaultTeamsSelectedIds.length < maxTeamToSelect) {
           defaultTeamsSelectedIds.push(team.value);
         }
       });
-
       this.setState({ schedule });
+
       this.setState({ teams: activeTeams });
+
       for (const teamSelectedId of this.state.teamsSelectedIds) {
         await this.updateScheduleData({ teamSelectedId });
       }
@@ -155,7 +168,6 @@ class Body extends React.Component {
 
   async handleChangeTeam({ index, newTeamId }) {
     if (index >= 0 && newTeamId) {
-      newTeamId = Number(newTeamId);
       const teamsSelectedIds = [...this.state.teamsSelectedIds];
       teamsSelectedIds.splice(index, 1, newTeamId);
 
@@ -194,40 +206,47 @@ class Body extends React.Component {
 
   async updateScheduleData({ teamSelectedId }) {
     try {
-      const resDate = await axios.get(
-        ` https://statsapi.web.nhl.com/api/v1/schedule?site=fr_nhl&startDate=${this.state.startDate}&endDate=${this.state.endDate}&teamId=${teamSelectedId}`
-      );
+      let scheduleDates;
+      try {
+        const resDate = await axios.get(
+          ` https://statsapi.web.nhl.com/api/v1/schedule?site=fr_nhl&startDate=${this.state.startDate}&endDate=${this.state.endDate}&teamId=${teamSelectedId}`
+        );
+        scheduleDates = resDate.data.dates;
+      } catch (error) {
+        scheduleDates =
+          currentSeason[teamSelectedId]?.games?.filter(
+            (game) =>
+              moment(game.gameDate).isSameOrAfter(this.state.startDate) &&
+              moment(game.gameDate).isSameOrBefore(this.state.endDate)
+          ) || [];
+      }
 
-      const scheduleDates = resDate.data.dates;
       const scheduleState = { ...this.state.schedule };
+
       scheduleState[teamSelectedId] = [];
 
       for (const date of this.state.allDates) {
-        const game = scheduleDates.find((schedule) => moment(schedule.date).format(userFormat) === date);
+        const game = scheduleDates.find((schedule) => moment(schedule.gameDate).format(userFormat) === date);
 
         let datas = {};
         if (game) {
-          const teams = game.games[0].teams;
-          const venue = game.games[0].venue;
-
-          if (teams.home.team.id === teamSelectedId || teams.away.team.id === teamSelectedId) {
+          if (game.homeTeam.abbrev === teamSelectedId || game.awayTeam.abbrev === teamSelectedId) {
             datas = {
-              awayTeamId: teams.away.team.id,
-              awayTeamShort: this.state.teams.find((team) => team.id === teams.away.team.id).franchise?.teamName,
-              homeTeamId: teams.home.team.id,
-              homeTeamShort: this.state.teams.find((team) => team.id === teams.home.team.id).franchise?.teamName,
-              arenaName: venue.name || '',
-              gameDate: game.date,
+              awayTeamId: game.awayTeam.abbrev,
+              awayTeamShort: game.awayTeam.abbrev,
+              homeTeamId: game.homeTeam.abbrev,
+              homeTeamShort: game.homeTeam.abbrev,
+              arenaName: game.venue?.default || '',
+              gameDate: game.gameDate,
               teamSelectedId,
-              timestampDate: new Date(game.date).getTime(),
+              timestampDate: new Date(game.gameDate).getTime(),
               show:
-                (teams.home.team.id === teamSelectedId && this.state.showHome) ||
-                (teams.away.team.id === teamSelectedId && this.state.showAway),
-              selectedTeam: Number(teams.home.team.id) === Number(teamSelectedId),
+                (game.homeTeam.abbrev === teamSelectedId && this.state.showHome) ||
+                (game.awayTeam.abbrev === teamSelectedId && this.state.showAway),
+              selectedTeam: game.homeTeam.abbrev === teamSelectedId,
             };
           }
         }
-
         scheduleState[teamSelectedId].push(datas);
       }
 
@@ -256,14 +275,14 @@ class Body extends React.Component {
 
   async updateVisibility() {
     const newSchedule = this.state.schedule;
+    console.log({ newSchedule });
 
     for (const team in newSchedule) {
       if (newSchedule[team].length) {
         newSchedule[team] = newSchedule[team].map((game) => {
           if (game.homeTeamId) {
             game.show =
-              (Number(game.homeTeamId) === Number(team) && this.state.showHome) ||
-              (Number(game.awayTeamId) === Number(team) && this.state.showAway);
+              (game.homeTeamId === team && this.state.showHome) || (game.awayTeamId === team && this.state.showAway);
 
             return game;
           } else {
@@ -407,7 +426,7 @@ class Body extends React.Component {
 
               {this.state.teamsSelectedIds.map((teamId, index) => (
                 <div className="col s3 m2">
-                  <div style={{ height: '8vh' }} id={teamId.toString()}>
+                  <div style={{ height: '8vh' }} id={teamId}>
                     <Selector
                       handleChangeTeam={this.handleChangeTeam}
                       index={index}
@@ -416,7 +435,7 @@ class Body extends React.Component {
                     />
                   </div>
 
-                  {this.state.schedule[teamId].map((teamDate) => (
+                  {this.state.schedule[teamId]?.map((teamDate) => (
                     <div onClick={() => this.hadOrRemoveGame(teamDate)} style={{ height: '25vh' }}>
                       <CardSchedule
                         teamDate={teamDate}
