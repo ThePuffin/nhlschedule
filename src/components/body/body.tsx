@@ -83,16 +83,17 @@ class Body extends React.Component {
 
     M.AutoInit();
     try {
+      const schedule = { ...this.state.schedule };
       let resTeams = allTeams?.standings || [];
 
-      const activeTeams = resTeams.map((team) => {
-        team.value = team.teamAbbrev?.default;
-        team.id = team.teamAbbrev?.default;
-        team.label = team.teamName?.default;
-        return team;
-      });
-
-      const schedule = { ...this.state.schedule };
+      const activeTeams = resTeams
+        .map((team) => {
+          team.value = team.teamAbbrev?.default;
+          team.id = team.teamAbbrev?.default;
+          team.label = team.teamName?.default;
+          return team;
+        })
+        .sort((a, b) => (a.placeName?.default > b.placeName?.default ? 1 : -1));
 
       activeTeams.forEach((team, index) => {
         schedule[team.value] = [];
@@ -212,7 +213,6 @@ class Body extends React.Component {
       }
 
       const scheduleState = isEmpty(this.state.schedule) ? schedule : { ...this.state.schedule };
-      console.log(scheduleState);
 
       scheduleState[teamSelectedId] = [];
 
@@ -266,7 +266,6 @@ class Body extends React.Component {
 
   async updateVisibility() {
     const newSchedule = this.state.schedule;
-    console.log({ newSchedule });
 
     for (const team in newSchedule) {
       if (newSchedule[team].length) {
