@@ -1,0 +1,19 @@
+.header-title {
+  display: inline;
+  font-size: small;
+}
+.img-title {
+  max-height: 5vh;
+}
+
+@media ((max-height: 750px)) {
+  .img-title {
+    max-height: 2.5vh;
+  }
+}
+
+@media ((max-height: 450px)) {
+  .header-title {
+    display: none;
+  }
+}

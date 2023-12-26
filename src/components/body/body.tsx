@@ -308,7 +308,7 @@ class Body extends React.Component {
       );
     } else {
       dateChoice = (
-        <div className="col s12 m2">
+        <div className="col s12 m2 buttons">
           <div className="input-field col s3 m6" id="buttonsDateAndPlace">
             <button
               className="dateButton selectButton"
@@ -370,12 +370,12 @@ class Body extends React.Component {
       if (this.state.gamesSelected.length) {
         selectedGame = (
           <div className="col s12 row-selection">
-            {this.state.gamesSelected.map((game) => (
+            {this.state.gamesSelected.map((game, i) => (
               <div
+                id={i}
                 onClick={() => this.removeSelectedGame(game)}
-                className="col s3 m2
+                className="col s3 m2 gameCard
               "
-                style={{ height: '25vh' }}
               >
                 <CardSchedule teamDate={game} />
               </div>
@@ -398,7 +398,7 @@ class Body extends React.Component {
           <div className="container gamesList">
             <div className="row">
               <div className="col s2 cardDateColumn">
-                <div style={{ visibility: 'hidden', height: '8vh' }} id="hidden selector">
+                <div id="hidden-selector">
                   <Selector
                     handleChangeTeam={this.handleChangeTeam}
                     index="1"
@@ -408,7 +408,7 @@ class Body extends React.Component {
                 </div>
 
                 {this.state.allDates.map((gameDate) => (
-                  <div style={{ height: '25vh' }}>
+                  <div className="gameCard">
                     <CardSchedule gameDate={gameDate} />
                   </div>
                 ))}
@@ -416,7 +416,7 @@ class Body extends React.Component {
 
               {this.state.teamsSelectedIds.map((teamId, index) => (
                 <div className="col s3 m2">
-                  <div style={{ height: '8vh' }} id={teamId}>
+                  <div className="visible-selector" id={teamId}>
                     <Selector
                       handleChangeTeam={this.handleChangeTeam}
                       index={index}
@@ -426,7 +426,7 @@ class Body extends React.Component {
                   </div>
 
                   {this.state.schedule[teamId]?.map((teamDate) => (
-                    <div onClick={() => this.hadOrRemoveGame(teamDate)} style={{ height: '25vh' }}>
+                    <div onClick={() => this.hadOrRemoveGame(teamDate)} className="gameCard">
                       <CardSchedule
                         teamDate={teamDate}
                         hideDate="true"
