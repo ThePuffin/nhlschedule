@@ -205,7 +205,7 @@ class Body extends React.Component {
         scheduleDates = resDate.data.dates;
       } catch (error) {
         scheduleDates =
-          currentSeason[teamSelectedId]?.games?.filter(
+          currentSeason[teamSelectedId]?.filter(
             (game) =>
               moment(game.gameDate).isSameOrAfter(this.state.startDate) &&
               moment(game.gameDate).isSameOrBefore(this.state.endDate)
